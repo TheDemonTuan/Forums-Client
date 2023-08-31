@@ -1,0 +1,19 @@
+.active {
+	position: fixed !important;
+	animation: showMenu 1s ease-in-out forwards;
+}
+
+@keyframes showMenu {
+	0% {
+		opacity: 0;
+		transform: translateY(-100%);
+	}
+	50% {
+		opacity: 0.5;
+		transform: translateY(25%);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
