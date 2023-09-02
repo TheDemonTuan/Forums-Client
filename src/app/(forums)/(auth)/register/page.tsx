@@ -8,10 +8,9 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import Line from "@/components/forums/Line";
-import RegisterForm from "@/components/forums/Register/RegisterForm";
 import Breadcrumb from "@/components/forums/Breadcrumb";
-import SocialButton from "@/components/forums/SocialButton";
+import SocialButton from "@/components/forums/Auth/SocialButton";
+import RegisterForm from "@/components/forums/Auth/Register/RegisterForm";
 
 const Register = () => {
 	return (
@@ -22,7 +21,7 @@ const Register = () => {
 					<CardTitle className="text-2xl">Sign Up</CardTitle>
 					<CardDescription>Sign in to access your account</CardDescription>
 				</CardHeader>
-				<Line className="mb-1" />
+				<div className="divider" />
 				<CardContent className="grid gap-5 p-8">
 					<SocialButton />
 					<div className="relative">

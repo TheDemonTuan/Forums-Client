@@ -8,7 +8,7 @@ import { AiOutlineHome } from "react-icons/ai";
 import { CgFormatSlash } from "react-icons/cg";
 
 const Breadcrumbs = () => {
-	const paths = usePathsName();
+	const { paths } = usePathsName();
 
 	return (
 		<>
@@ -25,7 +25,8 @@ const Breadcrumbs = () => {
 						) : (
 							<Link
 								className="hover:opacity-50"
-								href={_.join(_.take(paths, index + 1), "/") || "/"}>
+								href={_.join(_.take(paths, index + 1), "/") || "/"}
+								aria-label={`Back to ${path}`}>
 								{index ? path : <AiOutlineHome size={22} />}
 							</Link>
 						)}

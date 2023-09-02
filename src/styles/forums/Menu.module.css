@@ -1,3 +1,7 @@
+.nav-background {
+	visibility: hidden;
+}
+
 .nav-items {
 	display: flex;
 	justify-content: space-evenly;
@@ -33,6 +37,18 @@
 }
 
 @media screen and (max-width: 1023px) {
+	.nav-background {
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: calc(100% - 260px);
+		height: 100vh;
+		background-color: var(--forum_black-color);
+		opacity: 0.8;
+		visibility: visible;
+		z-index: 50;
+	}
+
 	.nav-items {
 		position: absolute;
 		flex-direction: column;
@@ -40,18 +56,18 @@
 		align-items: center;
 		top: 100%;
 		left: 0;
-		z-index: 20;
+		z-index: 50;
 		gap: 25px;
-		background-color: var(--forum_theme-color);
-		height: 100vh;
+		background-color: var(--forum_white-color);
+		border-top: 1px solid var(--forum_black-color);
+		min-height: 100vh;
 		padding: 20px;
 		opacity: 0;
 		width: 260px;
 		visibility: hidden;
 		transform: translateX(-100%);
-		transition: all 0.5s ease-in-out;
 		overflow: auto;
-		box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+		transition: all 0.4s ease-in;
 	}
 
 	.nav-items.show {

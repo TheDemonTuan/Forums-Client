@@ -1,0 +1,44 @@
+.sidebar-items li:first-child:hover {
+	cursor: pointer;
+}
+
+.sidebar-items li {
+	position: relative;
+}
+
+.sidebar-items li:hover,
+.active {
+	background-color: var(--forum_white-color);
+	border-bottom-left-radius: 30px;
+	border-top-left-radius: 30px;
+	font-weight: 600;
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.sidebar-items li:hover::before,
+.active::before {
+	content: "";
+	background-color: transparent;
+	position: absolute;
+	right: 0;
+	top: -50px;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	box-shadow: 35px 35px 0 10px var(--forum_white-color);
+	pointer-events: none;
+}
+
+.sidebar-items li:not(:last-child):hover::after,
+.active::after {
+	content: "";
+	background-color: transparent;
+	position: absolute;
+	right: 0;
+	bottom: -50px;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	box-shadow: 35px -35px 0 10px var(--forum_white-color);
+	pointer-events: none;
+}

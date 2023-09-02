@@ -14,12 +14,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<>
 			<Header />
-			<main className="flex-auto">{children}</main>
+			<main className="flex-auto p-5">{children}</main>
 			<ToastContainer
 				position="top-right"
 				autoClose={5000}
 				hideProgressBar={false}
-				newestOnTop={false}
+				newestOnTop={true}
 				closeOnClick
 				rtl={false}
 				pauseOnFocusLoss

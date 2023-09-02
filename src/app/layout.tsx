@@ -1,12 +1,17 @@
 "use client";
 
-import { Poppins } from "next/font/google";
+import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import { Metadata } from "next";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-const poppins = Poppins({ subsets: ["latin"], weight: "400" });
+const inter = Inter({
+	subsets: ["latin"],
+	preload: true,
+	weight: ["400"],
+	display: "swap",
+});
 
 export const metadata: Metadata = {
 	title: "TheDemonTuan - Forum",
@@ -17,7 +22,7 @@ const queryClient = new QueryClient();
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en">
-			<body className={poppins.className}>
+			<body className={inter.className}>
 				<QueryClientProvider client={queryClient}>
 					{children}
 					<ReactQueryDevtools initialIsOpen={false} />

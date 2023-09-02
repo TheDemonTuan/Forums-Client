@@ -8,9 +8,9 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import LoginForm from "@/components/forums/Login/LoginForm";
+import LoginForm from "@/components/forums/Auth/Login/LoginForm";
 import Breadcrumb from "@/components/forums/Breadcrumb";
-import SocialButton from "@/components/forums/SocialButton";
+import SocialButton from "@/components/forums/Auth/SocialButton";
 
 const Login = () => {
 	return (

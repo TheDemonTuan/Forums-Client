@@ -9,5 +9,8 @@ export const usePathsName = () => {
 		setPaths(pathname.split("/"));
 	}, [pathname]);
 
-	return paths;
+	return {
+		path: pathname,
+		paths,
+	};
 };

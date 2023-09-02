@@ -1,9 +1,9 @@
+/* eslint-disable react/display-name */
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
-	DropdownMenuContent,
 	DropdownMenuGroup,
 	DropdownMenuItem,
 	DropdownMenuLabel,
@@ -11,15 +11,22 @@ import {
 	DropdownMenuShortcut,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/hooks/useAuth";
-import { logoutAuth } from "@/libs/authApi";
+import { logoutAuth } from "@/lib/authApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { memo } from "react";
 import { toast } from "react-toastify";
 
-const UserNav = () => {
+const DropdownMenuContent = dynamic(() =>
+	import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuContent)
+);
+
+export const UserNav = memo(() => {
 	const router = useRouter();
 	const queryClient = useQueryClient();
 
@@ -39,7 +46,10 @@ const UserNav = () => {
 		logoutMutate();
 	};
 
-	const { data: authData } = useAuth();
+	const { data: authData, isLoading: authLoading } = useAuth();
+
+	if (authLoading) return <Skeleton className="h-12 w-12 rounded-full bg-forum_gray" />;
+	else if (!authData?.userInfo) return null;
 
 	return (
 		<DropdownMenu>
@@ -84,6 +94,4 @@ const UserNav = () => {
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);
-};
-
-export default UserNav;
+});

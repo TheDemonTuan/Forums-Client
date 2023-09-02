@@ -1,5 +1,5 @@
 import Breadcrumbs from "@/components/forums/Account/Breadcrumb";
-import SideBar from "@/components/forums/Account/Sidebar";
+import { SideBar } from "@/components/forums/Account/SideBar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<div className="flex py-3">
+		<div className="lg:flex lg_max:space-y-5">
 			<SideBar />
-			<div className="flex-grow p-5">
+			<div className="lg:flex-auto bg-forum_white rounded-2xl p-5 lg_max:shadow-2xl z-10">
 				<Breadcrumbs />
 				{children}
 			</div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useRef, useState } from "react";
+import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -13,13 +13,13 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { toast } from "react-toastify";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { LoginValidateFormSchema, LoginValidateForm } from "./LoginFormValidate";
+import { ValidateLoginFormSchema, ValidateLoginForm } from "./login-form.validate";
 import _ from "lodash";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { LoginBody, AuthResponse, loginAuth } from "@/libs/authApi";
+import { LoginBody, AuthResponse, loginAuth } from "@/lib/authApi";
 import { ApiErrorResponse } from "@/utils/http";
+import { ForumButtonOutline } from "../../Button";
 
 const LoginForm = () => {
 	const router = useRouter();
@@ -28,7 +28,7 @@ const LoginForm = () => {
 	const { isLoading, mutate } = useMutation<AuthResponse, ApiErrorResponse, LoginBody>({
 		mutationFn: async (body) => await loginAuth(body),
 		onSuccess: (data) => {
-			form.reset();
+			loginForm.reset();
 			router.replace("/");
 			queryClient.setQueryData(["auth"], data);
 			toast.success("Login successful!");
@@ -38,16 +38,14 @@ const LoginForm = () => {
 		},
 	});
 
-	const form = useForm<LoginValidateForm>({
-		resolver: zodResolver(LoginValidateFormSchema),
+	const loginForm = useForm<ValidateLoginForm>({
+		resolver: zodResolver(ValidateLoginFormSchema),
 		defaultValues: {
 			username: "",
 			password: "",
 		},
 	});
-	const handleSubmit = async (values: LoginValidateForm) => {
-		if (isLoading) return;
-
+	const handleLogin = async (values: ValidateLoginForm) => {
 		mutate({
 			username: values.username,
 			password: values.password,
@@ -55,42 +53,38 @@ const LoginForm = () => {
 	};
 
 	return (
-		<Form {...form}>
-			<form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+		<Form {...loginForm}>
+			<form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-5">
 				<FormField
-					control={form.control}
+					control={loginForm.control}
 					name="username"
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Username</FormLabel>
 							<FormControl>
-								<Input className="w-full" placeholder="example" {...field} />
+								<Input type="text" placeholder="example" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
 				<FormField
-					control={form.control}
+					control={loginForm.control}
 					name="password"
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Password</FormLabel>
 							<FormControl>
-								<Input type="password" placeholder="123***" {...field} />
+								<Input type="password" placeholder="1234****" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
-				<Button
-					type="submit"
-					variant={"outline"}
-					className="w-full uppercase text-[18px] hover:bg-forum_pink hover:text-forum_white"
-					disabled={isLoading}>
-					{isLoading && <span className="loading loading-spinner loading-xs" />}
+				<ForumButtonOutline type="submit" className="w-full" disabled={isLoading}>
+					{isLoading && <span className="loading loading-spinner loading-xs mr-2" />}
 					{!isLoading ? "Login" : "Loading..."}
-				</Button>
+				</ForumButtonOutline>
 			</form>
 		</Form>
 	);

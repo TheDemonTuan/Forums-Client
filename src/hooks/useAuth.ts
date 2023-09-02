@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { AuthResponse, verifyAuth } from "@/libs/authApi";
+import { AuthResponse, verifyAuth } from "@/lib/authApi";
 import { ApiErrorResponse } from "@/utils/http";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";

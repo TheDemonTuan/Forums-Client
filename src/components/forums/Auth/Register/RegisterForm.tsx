@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -13,14 +13,14 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { RegisterFormValidate, RegisterFormValidateSchema } from "./RegisterFormValidate";
+import { ValidateRegisterForm, ValidateRegisterFormSchema } from "./register-form.validate";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { RegisterBody, AuthResponse, registerAuth } from "@/libs/authApi";
+import { RegisterBody, AuthResponse, registerAuth } from "@/lib/authApi";
 import { ApiErrorResponse } from "@/utils/http";
+import { ForumButtonOutline } from "@/components/forums/Button";
 
 const RegisterForm = () => {
 	const router = useRouter();
@@ -39,8 +39,8 @@ const RegisterForm = () => {
 		},
 	});
 
-	const form = useForm<RegisterFormValidate>({
-		resolver: zodResolver(RegisterFormValidateSchema),
+	const form = useForm<ValidateRegisterForm>({
+		resolver: zodResolver(ValidateRegisterFormSchema),
 		defaultValues: {
 			email: "",
 			username: "",
@@ -49,7 +49,7 @@ const RegisterForm = () => {
 		},
 	});
 
-	const handleRegister = async (values: RegisterFormValidate) => {
+	const handleRegister = async (values: ValidateRegisterForm) => {
 		mutate({
 			email: values.email,
 			username: values.username,
@@ -59,7 +59,7 @@ const RegisterForm = () => {
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(handleRegister)} className="space-y-4">
+			<form onSubmit={form.handleSubmit(handleRegister)} className="space-y-5">
 				<FormField
 					control={form.control}
 					name="email"
@@ -67,12 +67,7 @@ const RegisterForm = () => {
 						<FormItem>
 							<FormLabel>Email</FormLabel>
 							<FormControl>
-								<Input
-									type="email"
-									className="w-full"
-									placeholder="example@example.com"
-									{...field}
-								/>
+								<Input type="email" placeholder="example@example.com" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -85,7 +80,7 @@ const RegisterForm = () => {
 						<FormItem>
 							<FormLabel>Username</FormLabel>
 							<FormControl>
-								<Input className="w-full" placeholder="example" {...field} />
+								<Input type="text" placeholder="example" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -98,7 +93,7 @@ const RegisterForm = () => {
 						<FormItem>
 							<FormLabel>Password</FormLabel>
 							<FormControl>
-								<Input type="password" placeholder="123***" {...field} />
+								<Input type="password" placeholder="1234****" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -111,20 +106,16 @@ const RegisterForm = () => {
 						<FormItem>
 							<FormLabel>Confirm password</FormLabel>
 							<FormControl>
-								<Input type="password" placeholder="123***" {...field} />
+								<Input type="password" placeholder="1234****" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
-				<Button
-					type="submit"
-					variant={"outline"}
-					className="w-full uppercase text-[18px] hover:bg-forum_pink hover:text-forum_white"
-					disabled={isLoading}>
-					{isLoading && <span className="loading loading-spinner loading-xs" />}
+				<ForumButtonOutline type="submit" className="w-full" disabled={isLoading}>
+					{isLoading && <span className="loading loading-spinner loading-xs mr-2" />}
 					{!isLoading ? "Register" : "Loading..."}
-				</Button>
+				</ForumButtonOutline>
 			</form>
 		</Form>
 	);

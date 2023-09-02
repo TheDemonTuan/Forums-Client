@@ -1,23 +1,32 @@
-import { Button } from "@/components/ui/button";
-import React, { ReactNode } from "react";
+import { Button, ButtonProps } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import React from "react";
 
-export const ForumButton = ({ children }: { children: ReactNode }) => {
+interface FormButtonProps extends ButtonProps {}
+
+export const ForumButton = (props?: FormButtonProps) => {
 	return (
 		<Button
-			type="button"
-			className="p-5 px-6 bg-forum_pink rounded-full hover:bg-forum_white hover:text-forum_pink">
-			{children}
+			{...props}
+			className={cn(
+				"p-5 px-6 bg-forum_pink rounded-full hover:bg-forum_white hover:text-forum_pink",
+				props?.className
+			)}>
+			{props?.children}
 		</Button>
 	);
 };
 
-export const ForumButtonOutline = ({ children }: { children: ReactNode }) => {
+export const ForumButtonOutline = (props?: FormButtonProps) => {
 	return (
 		<Button
-			type="button"
+			{...props}
 			variant={"outline"}
-			className="p-5 px-6 border-forum_pink rounded-full hover:bg-forum_pink hover:text-forum_white">
-			{children}
+			className={cn(
+				"p-5 px-6 border-forum_pink rounded-full hover:bg-forum_pink hover:text-forum_white",
+				props?.className
+			)}>
+			{props?.children}
 		</Button>
 	);
 };

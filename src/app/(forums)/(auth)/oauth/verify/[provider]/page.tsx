@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { OAuthAuthBody, AuthResponse, oauthAuth } from "@/libs/authApi";
+import { OAuthAuthBody, AuthResponse, oauthAuth } from "@/lib/authApi";
 import { ApiErrorResponse } from "@/utils/http";
 import _ from "lodash";
 

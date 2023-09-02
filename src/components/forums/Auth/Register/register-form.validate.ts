@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RegisterFormValidateSchema = z
+export const ValidateRegisterFormSchema = z
 	.object({
 		email: z
 			.string()
@@ -43,4 +43,4 @@ export const RegisterFormValidateSchema = z
 		path: ["confirm_password"],
 	});
 
-export type RegisterFormValidate = z.infer<typeof RegisterFormValidateSchema>;
+export type ValidateRegisterForm = z.infer<typeof ValidateRegisterFormSchema>;
