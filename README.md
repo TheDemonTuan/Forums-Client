@@ -1,15 +1,15 @@
 ## Installation
 
 ```bash
-$ npm install
+$ pnpm install
 ```
 
 ## Running the app
 
 ```bash
 # development and watch mode
-$ npm run dev
+$ pnpm run dev
 
 # production mode
-$ npm run start
+$ pnpm run start
 ```
