@@ -4,9 +4,6 @@ export const ValidatePasswordFormSchema = z
 	.object({
 		old_password: z
 			.string()
-			.min(2, {
-				message: "Username must be at least 2 characters.",
-			})
 			.min(8, {
 				message: "Old password must be longer than or equal to 8 characters.",
 			})
@@ -30,13 +27,12 @@ export const ValidatePasswordFormSchema = z
 				message: "Confirm new password must be shorter than or equal to 50 characters.",
 			}),
 	})
-	.refine((data) => data.new_password === data.confirm_new_password, {
-		message: "Confirm new password must match new password",
-		path: ["confirm_password"],
-	})
 	.refine((data) => data.old_password !== data.new_password, {
 		message: "New password must be different from old password",
 		path: ["new_password"],
+	})
+	.refine((data) => data.new_password === data.confirm_new_password, {
+		message: "New password and confirm new password must match",
+		path: ["confirm_new_password"],
 	});
-
 export type ValidatePasswordForm = z.infer<typeof ValidatePasswordFormSchema>;

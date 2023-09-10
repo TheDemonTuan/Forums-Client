@@ -9,7 +9,7 @@ export const ForumButton = (props?: FormButtonProps) => {
 		<Button
 			{...props}
 			className={cn(
-				"p-5 px-6 bg-forum_pink rounded-full hover:bg-forum_white hover:text-forum_pink",
+				"p-5 px-6 bg-forum_pink rounded-full hover:bg-forum_white hover:text-forum_pink hover:ring-1 hover:ring-forum_pink",
 				props?.className
 			)}>
 			{props?.children}
@@ -19,14 +19,16 @@ export const ForumButton = (props?: FormButtonProps) => {
 
 export const ForumButtonOutline = (props?: FormButtonProps) => {
 	return (
-		<Button
-			{...props}
-			variant={"outline"}
-			className={cn(
-				"p-5 px-6 border-forum_pink rounded-full hover:bg-forum_pink hover:text-forum_white",
-				props?.className
-			)}>
-			{props?.children}
-		</Button>
+		<div className="flex justify-center items-center">
+			<Button
+				{...props}
+				variant={"outline"}
+				className={cn(
+					"p-5 px-6 border-forum_pink rounded-full hover:bg-forum_pink hover:text-forum_white",
+					props?.className
+				)}>
+				{props?.children}
+			</Button>
+		</div>
 	);
 };

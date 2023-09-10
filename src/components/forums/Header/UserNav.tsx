@@ -49,23 +49,21 @@ export const UserNav = memo(() => {
 	const { data: authData, isLoading: authLoading } = useAuth();
 
 	if (authLoading) return <Skeleton className="h-12 w-12 rounded-full bg-forum_gray" />;
-	else if (!authData?.userInfo) return null;
+	else if (!authData) return null;
 
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Avatar className="h-10 w-10 cursor-pointer ring ring-forum_pink">
-					<AvatarImage src={authData?.userInfo?.avatar} alt="User Avatar" />
+					<AvatarImage src={authData?.avatar} alt="User Avatar" />
 					<AvatarFallback>Avatar</AvatarFallback>
 				</Avatar>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-56" align="end" forceMount>
 				<DropdownMenuLabel className="font-normal">
 					<div className="flex flex-col space-y-1">
-						<p className="text-sm font-medium leading-none">@{authData?.userInfo?.username}</p>
-						<p className="text-xs leading-none text-muted-foreground">
-							{authData?.userInfo?.email}
-						</p>
+						<p className="text-sm font-medium leading-none">@{authData?.username}</p>
+						<p className="text-xs leading-none text-muted-foreground">{authData?.email}</p>
 					</div>
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />

@@ -95,7 +95,6 @@ const OAuthVerify = ({ params }: { params: { provider: string } }) => {
 				<CardHeader className="p-3">
 					<CardTitle className="text-2xl capitalize text-center flex items-center justify-center gap-2">
 						{provider} OAuth Verifying
-						<span className="loading loading-dots loading-lg" />
 					</CardTitle>
 					<CardDescription className="text-center">
 						Please wait while we verify your {provider} account to continue

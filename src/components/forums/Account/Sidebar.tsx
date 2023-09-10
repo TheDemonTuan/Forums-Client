@@ -28,16 +28,16 @@ export const SideBar = () => {
 	const { path, paths } = usePathsName();
 
 	return (
-		<div className="relative space-y-2">
+		<div className="relative space-y-2 lg:w-72">
 			<div className="flex items-center gap-1 p-1 lg_max:bg-forum_white lg_max:rounded-xl lg_max:shadow-2xl lg_max:p-3">
 				<Avatar className="text-base h-16 w-16 relative inline-flex items-center justify-center mr-2">
-					<AvatarImage src={authData?.userInfo?.avatar} alt="User Avatar" />
+					<AvatarImage src={authData?.avatar} alt="User Avatar" />
 					<AvatarFallback>Avatar</AvatarFallback>
 				</Avatar>
 				<div className="overflow-hidden">
-					<h1 className="text-lg font-semibold">{authData?.userInfo?.username}</h1>
+					<h1 className="text-lg font-semibold">{authData?.username}</h1>
 					<h2 className="text-[13px] text-forum_black mb-1">
-						@<span className="text-forum_gray">{authData?.userInfo?.display_name}</span>
+						@<span className="text-forum_gray">{authData?.display_name}</span>
 					</h2>
 					<span className="flex items-center space-x-1">
 						<Link href="/" className="flex items-center text-xs space-x-1 hover:underline">

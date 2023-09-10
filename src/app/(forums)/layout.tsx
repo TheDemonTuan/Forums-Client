@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<>
 			<Header />
-			<main className="flex-auto p-5">{children}</main>
+			<main className="flex-auto">{children}</main>
 			<ToastContainer
 				position="top-right"
 				autoClose={5000}

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { memo, useCallback, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -18,15 +18,18 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { RegisterBody, AuthResponse, registerAuth } from "@/lib/authApi";
+import { RegisterAuthBody, AuthResponse, registerAuth } from "@/lib/authApi";
 import { ApiErrorResponse } from "@/utils/http";
 import { ForumButtonOutline } from "@/components/forums/Button";
+import { useGoogleRecaptchaV3 } from "@/hooks/useGoogleRecaptcha";
 
 const RegisterForm = () => {
 	const router = useRouter();
 	const queryClient = useQueryClient();
+	const { handleReCaptchaVerify } = useGoogleRecaptchaV3();
+	const [recaptchaLoading, setRecaptchaLoading] = useState<boolean>(false);
 
-	const { isLoading, mutate } = useMutation<AuthResponse, ApiErrorResponse, RegisterBody>({
+	const { isLoading, mutate } = useMutation<AuthResponse, ApiErrorResponse, RegisterAuthBody>({
 		mutationFn: async (body) => await registerAuth(body),
 		onSuccess: (data) => {
 			form.reset();
@@ -49,13 +52,23 @@ const RegisterForm = () => {
 		},
 	});
 
-	const handleRegister = async (values: ValidateRegisterForm) => {
-		mutate({
-			email: values.email,
-			username: values.username,
-			password: values.password,
-		});
-	};
+	const handleRegister = useCallback(
+		async (values: ValidateRegisterForm) => {
+			setRecaptchaLoading(true);
+			const recaptcha = await handleReCaptchaVerify();
+
+			if (!recaptcha) {
+				toast.error("Please verify reCaptcha!");
+				return;
+			}
+			setRecaptchaLoading(false);
+			mutate({
+				...values,
+				recaptcha,
+			});
+		},
+		[handleReCaptchaVerify, mutate]
+	);
 
 	return (
 		<Form {...form}>
@@ -112,13 +125,20 @@ const RegisterForm = () => {
 						</FormItem>
 					)}
 				/>
-				<ForumButtonOutline type="submit" className="w-full" disabled={isLoading}>
-					{isLoading && <span className="loading loading-spinner loading-xs mr-2" />}
-					{!isLoading ? "Register" : "Loading..."}
+				<ForumButtonOutline
+					type="submit"
+					className="w-full"
+					disabled={isLoading || recaptchaLoading}>
+					{isLoading || recaptchaLoading ? (
+						<span className="loading loading-spinner loading-xs mr-2" />
+					) : (
+						""
+					)}
+					{!isLoading && !recaptchaLoading ? "Register" : "Loading..."}
 				</ForumButtonOutline>
 			</form>
 		</Form>
 	);
 };
 
-export default RegisterForm;
+export default memo(RegisterForm);

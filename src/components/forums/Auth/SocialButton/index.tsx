@@ -14,11 +14,12 @@ const SocialButton = () => {
 		provider: string
 	) => {
 		e.preventDefault();
+		document.body.classList.add("pointer-events-none");
 		const button = e.target as HTMLButtonElement;
 		button.disabled = true;
 		button.appendChild(document.createElement("span")).className =
 			"loading loading-bars loading-xs";
-		router.push(`/oauth/${provider}`);
+		router.replace(`/oauth/${provider}`);
 	};
 
 	return (

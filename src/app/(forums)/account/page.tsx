@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import React from "react";
 
 const Account = () => {
-	const { data: authData } = useAuth();
+	// const { data: authData } = useAuth();
 
 	return <div className=""></div>;
 };
