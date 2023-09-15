@@ -35,6 +35,6 @@ export const ValidatePrivateUserNameFormSchema = z
 	})
 	.refine((data) => data.new_username === data.confirm_new_username, {
 		message: "New username and confirm new username must match",
-		path: ["new_username"],
+		path: ["confirm_new_username"],
 	});
 export type ValidatePrivateUserNameForm = z.infer<typeof ValidatePrivateUserNameFormSchema>;

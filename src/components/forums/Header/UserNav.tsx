@@ -22,9 +22,7 @@ import { useRouter } from "next/navigation";
 import { memo } from "react";
 import { toast } from "react-toastify";
 
-const DropdownMenuContent = dynamic(() =>
-	import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuContent)
-);
+const DropdownMenuContent = dynamic(() => import("@/components/ui/dropdown-menu").then((mod) => mod.DropdownMenuContent));
 
 export const UserNav = memo(() => {
 	const router = useRouter();
@@ -55,14 +53,14 @@ export const UserNav = memo(() => {
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Avatar className="h-10 w-10 cursor-pointer ring ring-forum_pink">
-					<AvatarImage src={authData?.avatar} alt="User Avatar" />
+					<AvatarImage src={authData?.avatar || "/guest.webp"} alt="User Avatar" />
 					<AvatarFallback>Avatar</AvatarFallback>
 				</Avatar>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-56" align="end" forceMount>
 				<DropdownMenuLabel className="font-normal">
 					<div className="flex flex-col space-y-1">
-						<p className="text-sm font-medium leading-none">@{authData?.username}</p>
+						<p className="text-sm font-medium leading-none">{authData?.username}</p>
 						<p className="text-xs leading-none text-muted-foreground">{authData?.email}</p>
 					</div>
 				</DropdownMenuLabel>

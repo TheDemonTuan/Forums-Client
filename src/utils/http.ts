@@ -7,7 +7,7 @@ interface ErrorResponse {
 }
 
 const http = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_API_HOST,
+	baseURL: process.env.NEXT_PUBLIC_API_URL,
 	timeout: 10000,
 	withCredentials: true,
 	headers: {

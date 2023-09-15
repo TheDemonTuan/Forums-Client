@@ -9,18 +9,10 @@ import { AiOutlineUser, AiFillSetting, AiOutlineArrowLeft } from "react-icons/ai
 import { BiSolidDashboard, BiSolidNotepad } from "react-icons/bi";
 import { BsPersonLock, BsShieldLock } from "react-icons/bs";
 import { LuRadioTower } from "react-icons/lu";
-import { GrView } from "react-icons/gr";
 import { usePathsName } from "@/hooks/usePathsName";
 import styles from "@/styles/forums/SideBar.module.css";
 import { useRouter } from "next/navigation";
-import {
-	Sheet,
-	SheetContent,
-	SheetDescription,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { CiMenuFries } from "react-icons/ci";
 
 export const SideBar = () => {
@@ -30,8 +22,8 @@ export const SideBar = () => {
 	return (
 		<div className="relative space-y-2 lg:w-72">
 			<div className="flex items-center gap-1 p-1 lg_max:bg-forum_white lg_max:rounded-xl lg_max:shadow-2xl lg_max:p-3">
-				<Avatar className="text-base h-16 w-16 relative inline-flex items-center justify-center mr-2">
-					<AvatarImage src={authData?.avatar} alt="User Avatar" />
+				<Avatar className="text-base h-16 w-16 relative inline-flex items-center justify-center mr-2 ring-2 ring-forum_pink">
+					<AvatarImage src={authData?.avatar || "/guest.webp"} alt="User Avatar" />
 					<AvatarFallback>Avatar</AvatarFallback>
 				</Avatar>
 				<div className="overflow-hidden">
@@ -40,8 +32,7 @@ export const SideBar = () => {
 						@<span className="text-forum_gray">{authData?.display_name}</span>
 					</h2>
 					<span className="flex items-center space-x-1">
-						<Link href="/" className="flex items-center text-xs space-x-1 hover:underline">
-							<GrView />
+						<Link href="/" className="text-xs hover:underline hover:opacity-80">
 							<span>View profile</span>
 						</Link>
 					</span>
@@ -113,19 +104,14 @@ const SideBarMenu = memo((props: SideBarMenuProps) => {
 	};
 
 	return (
-		<ul
-			className={`pt-2 pb-4 space-y-3 ${!isMobile && "lg_max:hidden"} ${
-				styles?.["sidebar-items"]
-			}`}>
+		<ul className={`pt-2 pb-4 space-y-3 ${!isMobile && "lg_max:hidden"} ${styles?.["sidebar-items"]}`}>
 			<li className={`flex items-center p-2 space-x-3 rounded-md`} onClick={handleBack}>
 				<AiOutlineArrowLeft />
 				<span>Back</span>
 			</li>
 			{SideBarMenuData.map((item, index) => (
 				<li key={index} className={`${path === `/${paths[1] + item?.link}` && styles?.active}`}>
-					<Link
-						href={`/${paths[1] + item?.link}`}
-						className="flex items-center p-2 space-x-3 rounded-md">
+					<Link href={`/${paths[1] + item?.link}`} className="flex items-center p-2 space-x-3 rounded-md">
 						{item?.icon}
 						<span>{item?.children}</span>
 					</Link>

@@ -24,7 +24,7 @@ export const ForumButtonOutline = (props?: FormButtonProps) => {
 				{...props}
 				variant={"outline"}
 				className={cn(
-					"p-5 px-6 border-forum_pink rounded-full hover:bg-forum_pink hover:text-forum_white",
+					"p-5 px-6 border-forum_pink text-forum_pink rounded-full hover:bg-forum_pink hover:text-forum_white",
 					props?.className
 				)}>
 				{props?.children}

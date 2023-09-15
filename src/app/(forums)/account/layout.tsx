@@ -1,5 +1,8 @@
+"use client";
+
 import Breadcrumbs from "@/components/forums/Account/Breadcrumb";
 import { SideBar } from "@/components/forums/Account/SideBar";
+import { useProtectRoute } from "@/hooks/useProtectRoute";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,6 +11,10 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+	const protectRoute = useProtectRoute();
+
+	if (protectRoute) return protectRoute;
+
 	return (
 		<div className="lg:flex lg_max:space-y-5 p-5">
 			<SideBar />

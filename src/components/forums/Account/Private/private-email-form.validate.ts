@@ -22,6 +22,6 @@ export const ValidatePrivateEmailFormSchema = z
 	})
 	.refine((data) => data.new_email === data.confirm_new_email, {
 		message: "New email and confirm new email must match",
-		path: ["new_email"],
+		path: ["confirm_new_email"],
 	});
 export type ValidatePrivateEmailForm = z.infer<typeof ValidatePrivateEmailFormSchema>;
