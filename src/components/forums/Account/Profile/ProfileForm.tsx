@@ -11,16 +11,16 @@ import { ForumButtonOutline } from "../../Button";
 import { PublicBody, publicAccount } from "@/lib/accountApi";
 import { useAuth } from "@/hooks/useAuth";
 import ConfirmDialog from "@/components/forums/ConfirmDialog";
-import { BiError } from "react-icons/bi";
 import { Textarea } from "@/components/ui/textarea";
 import { AiOutlineEdit } from "react-icons/ai";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 const ProfileForm = () => {
 	const queryClient = useQueryClient();
 	const { data: authData } = useAuth();
-	const [modal, setModal] = React.useState<boolean>(false);
+	const [dialog, setDialog] = React.useState<boolean>(false);
 	const [selectedImage, setSelectedImage] = React.useState<string>("");
 	const [image, setImage] = React.useState<File>();
 
@@ -37,7 +37,7 @@ const ProfileForm = () => {
 			toast.success("Update public info successful!");
 		},
 		onError: (err) => {
-			toast.error(_.get(err?.response?.data, "message", "Update avatar failed!"));
+			toast.error(getErrorMessage(err, "Update public info failed!"));
 		},
 	});
 
@@ -68,16 +68,15 @@ const ProfileForm = () => {
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		setModal(true);
+		setDialog(true);
 	};
 
 	return (
 		<>
-			<ConfirmDialog title="Confirm your public info changed?" open={modal} onClose={() => setModal(false)} onConfirm={handleConfirm}>
-				<BiError size={24} />
-				Are you sure you want to change your public info?
+			<ConfirmDialog title="Are you sure want to change your public info?" dialog={dialog} setDialog={setDialog} onConfirm={handleConfirm}>
+				This action cannot be undone. This will permanently change your account profile.
 			</ConfirmDialog>
-			<form className="space-y-3" encType="multipart/form-data" onSubmit={(e) => handleSubmit(e)}>
+			<form className="space-y-20" encType="multipart/form-data" onSubmit={(e) => handleSubmit(e)}>
 				<div className="grid lg:grid-flow-col items-start">
 					<div className="space-y-3">
 						<div className="space-y-1">
@@ -98,7 +97,7 @@ const ProfileForm = () => {
 									<AvatarImage
 										src={selectedImage || authData?.avatar || "/guest.webp"}
 										alt="Profile Avatar"
-										className="rounded-full w-32 h-32 lg:w-52 lg:h-52 object-fill object-center transition-transform transform group-hover:grayscale-0 group-hover:opacity-20"
+										className="rounded-full w-28 h-28 lg:w-40 lg:h-40 object-fill object-center transition-transform transform group-hover:grayscale-0 group-hover:opacity-20"
 									/>
 									<AvatarFallback>{authData?.username} Avatar</AvatarFallback>
 								</Avatar>
@@ -111,7 +110,7 @@ const ProfileForm = () => {
 									<AiOutlineEdit size={16} />
 									Edit
 								</span>
-								<input type="file" className="hidden" name="avatar" ref={avatarInputRef} onChange={handleImageChange} />
+								<input type="file" className="hidden" name="avatar" ref={avatarInputRef} accept="image/*" onChange={handleImageChange} />
 							</label>
 						</div>
 					</div>

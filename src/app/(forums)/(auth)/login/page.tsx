@@ -1,16 +1,16 @@
 import Link from "next/link";
 import React from "react";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import LoginForm from "@/components/forums/Auth/Login/LoginForm";
 import Breadcrumb from "@/components/forums/Breadcrumb";
 import SocialButton from "@/components/forums/Auth/SocialButton";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+	return {
+		title: "Login to access your account - TheDemonTuan",
+	};
+}
 
 const Login = () => {
 	return (

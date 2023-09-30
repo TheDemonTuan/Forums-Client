@@ -1,39 +1,48 @@
-import Dialog from "./Dialog";
-import { ForumButton, ForumButtonOutline } from "../Button";
-import { memo, useEffect } from "react";
+import { memo } from "react";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 interface Props {
 	title: string;
 	children: React.ReactNode;
-	open: boolean;
-	onClose: Function;
+	dialog: boolean;
+	setDialog: Function;
 	onConfirm: Function;
 }
 const ConfirmDialog = (props: Props) => {
-	const { open, onClose, title, children, onConfirm } = props;
+	const { dialog, setDialog, title, children, onConfirm } = props;
 
-	useEffect(() => {
-		document.body.classList.toggle("overflow-hidden", open);
-	}, [open]);
-
-	if (!open) {
-		return <></>;
-	}
+	const handleConfirm = () => {
+		onConfirm();
+		setDialog(false);
+	};
 
 	return (
-		<Dialog open={open} onClose={onClose}>
-			<h2 className="text-xl">{title}</h2>
-			<div className="py-5">{children}</div>
-			<div className="flex justify-end gap-3">
-				<ForumButtonOutline onClick={() => onClose()}>No</ForumButtonOutline>
-				<ForumButton
-					onClick={() => {
-						onClose();
-						onConfirm();
-					}}>
-					Confirm
-				</ForumButton>
-			</div>
-		</Dialog>
+		<>
+			<AlertDialog open={dialog}>
+				{/* <AlertDialogTrigger>Open</AlertDialogTrigger> */}
+				<AlertDialogContent>
+					<AlertDialogHeader>
+						<AlertDialogTitle>{title}</AlertDialogTitle>
+						<AlertDialogDescription>{children}</AlertDialogDescription>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel onClick={() => setDialog(false)}>Cancel</AlertDialogCancel>
+						<AlertDialogAction onClick={handleConfirm} className="bg-forum_pink hover:bg-forum_white hover:opacity-90 hover:text-forum_pink">
+							Continue
+						</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
+		</>
 	);
 };
 

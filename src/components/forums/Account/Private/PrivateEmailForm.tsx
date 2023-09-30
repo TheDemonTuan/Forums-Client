@@ -4,24 +4,14 @@ import React, { memo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AuthResponse, OAuthProviders } from "@/lib/authApi";
 import { ApiErrorResponse } from "@/utils/http";
 import { ForumButtonOutline } from "../../Button";
-import {
-	ValidatePrivateEmailForm,
-	ValidatePrivateEmailFormSchema,
-} from "./private-email-form.validate";
+import { ValidatePrivateEmailForm, ValidatePrivateEmailFormSchema } from "./private-email-form.validate";
 import { PrivateEmailAccountBody, privateEmailAccount } from "@/lib/accountApi";
 import { useAuth } from "@/hooks/useAuth";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -31,18 +21,14 @@ import ConfirmDialog from "../../ConfirmDialog";
 const PrivateEmailForm = () => {
 	const queryClient = useQueryClient();
 	const { data: authData } = useAuth();
-	const [modal, setModal] = React.useState<boolean>(false);
+	const [dialog, setDialog] = React.useState<boolean>(false);
 	const [values, setValues] = React.useState<ValidatePrivateEmailForm>({
 		new_email: "",
 		confirm_new_email: "",
 		confirm_password: "",
 	});
 
-	const { isLoading, mutate } = useMutation<
-		AuthResponse,
-		ApiErrorResponse,
-		PrivateEmailAccountBody
-	>({
+	const { isLoading, mutate } = useMutation<AuthResponse, ApiErrorResponse, PrivateEmailAccountBody>({
 		mutationFn: async (body) => await privateEmailAccount(body),
 		onSuccess: (data) => {
 			privateEmailForm.reset();
@@ -64,7 +50,7 @@ const PrivateEmailForm = () => {
 	});
 	const handlePrivateEmail = async (values: ValidatePrivateEmailForm) => {
 		setValues(values);
-		setModal((prev) => !prev);
+		setDialog((prev) => !prev);
 	};
 
 	const handleConfirm = () => {
@@ -85,13 +71,8 @@ const PrivateEmailForm = () => {
 
 	return (
 		<>
-			<ConfirmDialog
-				title="Confirm your email changed?"
-				open={modal}
-				onClose={() => setModal(false)}
-				onConfirm={handleConfirm}>
-				<BiError size={24} />
-				Are you sure you want to change your email?
+			<ConfirmDialog title="Are you sure want to change your email?" dialog={dialog} setDialog={setDialog} onConfirm={handleConfirm}>
+				This action cannot be undone. This will permanently change your email.
 			</ConfirmDialog>
 			<Form {...privateEmailForm}>
 				<form onSubmit={privateEmailForm.handleSubmit(handlePrivateEmail)} className="space-y-5">

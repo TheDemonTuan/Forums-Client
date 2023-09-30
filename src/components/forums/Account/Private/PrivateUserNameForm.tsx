@@ -4,14 +4,7 @@ import React, { memo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -20,28 +13,21 @@ import { ApiErrorResponse } from "@/utils/http";
 import { ForumButtonOutline } from "../../Button";
 import { PrivateUserNameAccountBody, privateUserNameAccount } from "@/lib/accountApi";
 import { useAuth } from "@/hooks/useAuth";
-import {
-	ValidatePrivateUserNameForm,
-	ValidatePrivateUserNameFormSchema,
-} from "./private-username-form.validate";
+import { ValidatePrivateUserNameForm, ValidatePrivateUserNameFormSchema } from "./private-username-form.validate";
 import ConfirmDialog from "@/components/forums/ConfirmDialog";
 import { BiError } from "react-icons/bi";
 
 const PrivateUserNameForm = () => {
 	const queryClient = useQueryClient();
 	const { data: authData } = useAuth();
-	const [modal, setModal] = React.useState<boolean>(false);
+	const [dialog, setDialog] = React.useState<boolean>(false);
 	const [values, setValues] = React.useState<ValidatePrivateUserNameForm>({
 		new_username: "",
 		confirm_new_username: "",
 		confirm_password: "",
 	});
 
-	const { isLoading, mutate } = useMutation<
-		AuthResponse,
-		ApiErrorResponse,
-		PrivateUserNameAccountBody
-	>({
+	const { isLoading, mutate } = useMutation<AuthResponse, ApiErrorResponse, PrivateUserNameAccountBody>({
 		mutationFn: async (body) => await privateUserNameAccount(body),
 		onSuccess: (data) => {
 			privateUserNameForm.reset();
@@ -63,7 +49,7 @@ const PrivateUserNameForm = () => {
 	});
 	const handlePrivateUserName = async (values: ValidatePrivateUserNameForm) => {
 		setValues(values);
-		setModal((prev) => !prev);
+		setDialog((prev) => !prev);
 	};
 
 	const handleConfirm = () => {
@@ -74,18 +60,11 @@ const PrivateUserNameForm = () => {
 
 	return (
 		<>
-			<ConfirmDialog
-				title="Confirm your username changed?"
-				open={modal}
-				onClose={() => setModal(false)}
-				onConfirm={handleConfirm}>
-				<BiError size={24} />
-				Are you sure you want to change your username?
+			<ConfirmDialog title="Are you sure want to change your username?" dialog={dialog} setDialog={setDialog} onConfirm={handleConfirm}>
+				This action cannot be undone. This will permanently change your username.
 			</ConfirmDialog>
 			<Form {...privateUserNameForm}>
-				<form
-					onSubmit={privateUserNameForm.handleSubmit(handlePrivateUserName)}
-					className="space-y-5">
+				<form onSubmit={privateUserNameForm.handleSubmit(handlePrivateUserName)} className="space-y-5">
 					<FormField
 						control={privateUserNameForm.control}
 						name="new_username"

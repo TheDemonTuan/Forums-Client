@@ -2,22 +2,22 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "./useAuth";
 
 export const useProtectRoute = () => {
-	const { data: authData, isLoading } = useAuth();
+	const { data: authData, isLoading: authLoading } = useAuth();
 	const router = useRouter();
-	if (isLoading) {
+	if (authLoading) {
 		return (
-			<h1 className="flex items-center">
-				Loading...
-				<span className="loading loading-infinity loading-lg" />
-			</h1>
+			<div className="flex items-center gap-2">
+				Loading
+				<span className="loading loading-spinner text-forum_black" />
+			</div>
 		);
 	} else if (!authData) {
 		router.replace("/login");
 		return (
-			<h1 className="flex items-center">
-				Redirecting...
-				<span className="loading loading-ring loading-lg"></span>
-			</h1>
+			<div className="flex items-center">
+				Redirecting
+				<span className="loading loading-spinner text-forum_black" />
+			</div>
 		);
 	}
 };

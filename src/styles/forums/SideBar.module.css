@@ -30,7 +30,7 @@
 }
 
 .sidebar-items li:not(:last-child):hover::after,
-.active::after {
+.active:not(:last-child)::after {
 	content: "";
 	background-color: transparent;
 	position: absolute;

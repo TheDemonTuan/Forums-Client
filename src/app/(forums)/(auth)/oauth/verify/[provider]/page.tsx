@@ -2,20 +2,14 @@
 
 import Breadcrumb from "@/components/forums/Breadcrumb";
 import { notFound, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useRef } from "react";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import React, { useCallback, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { OAuthAuthBody, AuthResponse, oauthAuth } from "@/lib/authApi";
+import { AuthResponse, oauthAuth, OAuthAuthParams } from "@/lib/authApi";
 import { ApiErrorResponse } from "@/utils/http";
 import _ from "lodash";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 const OAuthVerify = ({ params }: { params: { provider: string } }) => {
 	const searchParams = useSearchParams();
@@ -23,82 +17,105 @@ const OAuthVerify = ({ params }: { params: { provider: string } }) => {
 	const code = searchParams.get("code");
 	const router = useRouter();
 	const queryClient = useQueryClient();
-	const oauthVerify = useRef(true);
+	const { executeRecaptcha } = useGoogleReCaptcha();
 
-	const { mutate: googleMutate } = useMutation<AuthResponse, ApiErrorResponse, OAuthAuthBody>({
-		mutationFn: async (body) => await oauthAuth(body),
-		onSuccess: (data) => {
+	const {
+		data: googleData,
+		error: googleError,
+		mutate: googleMutate,
+		isSuccess: googleIsSuccess,
+		isError: googleIsError,
+	} = useMutation<AuthResponse, ApiErrorResponse, OAuthAuthParams>({
+		mutationFn: async (params) => await oauthAuth(params),
+	});
+
+	useEffect(() => {
+		if (googleIsSuccess) {
 			toast.success("Logged in with Google successfully");
-			queryClient.setQueryData(["auth"], data);
+			queryClient.setQueryData(["auth"], googleData);
 			router.replace("/");
-		},
-		onError: (error) => {
-			toast.error(
-				_.get(
-					error?.response?.data,
-					"message",
-					"An error occurred while authenticating with Google"
-				)
-			);
+		}
+	}, [googleData, googleIsSuccess, queryClient, router]);
+
+	useEffect(() => {
+		if (googleIsError) {
+			toast.error(_.get(googleError?.response?.data, "message", "An error occurred while authenticating with Google"));
 			router.replace("/login");
-		},
+		}
+	}, [googleError?.response?.data, googleIsError, router]);
+
+	const {
+		data: githubData,
+		error: githubError,
+		mutate: githubMutate,
+		isSuccess: githubIsSuccess,
+		isError: githubIsError,
+	} = useMutation<AuthResponse, ApiErrorResponse, OAuthAuthParams>({
+		mutationFn: async (params) => await oauthAuth(params),
 	});
 
-	const { mutate: githubMutate } = useMutation<AuthResponse, ApiErrorResponse, OAuthAuthBody>({
-		mutationFn: async (body) => await oauthAuth(body),
-		onSuccess: (data) => {
+	useEffect(() => {
+		if (githubIsSuccess) {
 			toast.success("Logged in with Github successfully");
-			queryClient.setQueryData(["auth"], data);
+			queryClient.setQueryData(["auth"], githubData);
 			router.replace("/");
-		},
-		onError: (error) => {
-			toast.error(
-				_.get(
-					error?.response?.data,
-					"message",
-					"An error occurred while authenticating with Github"
-				)
-			);
+		}
+	}, [githubData, githubIsSuccess, queryClient, router]);
+
+	useEffect(() => {
+		if (githubIsError) {
+			toast.error(_.get(githubError?.response?.data, "message", "An error occurred while authenticating with Github"));
 			router.replace("/login");
-		},
-	});
+		}
+	}, [githubError?.response?.data, githubIsError, router]);
 
 	if (!provider || !code) notFound();
 
-	useEffect(() => {
-		if (!oauthVerify.current) return;
+	const handleReCaptchaVerify = useCallback(async () => {
+		if (!executeRecaptcha) return;
+
+		const recaptcha = await executeRecaptcha("tdtAction");
+
+		if (!recaptcha) {
+			router.replace("/login");
+			return toast.error("Can't verify reCaptcha!");
+		}
 		switch (provider) {
 			case "google":
 				googleMutate({
-					code,
-					provider,
+					body: {
+						code,
+						provider,
+					},
+					recaptcha,
 				});
 				break;
 			case "github":
 				githubMutate({
-					code,
-					provider,
+					body: {
+						code,
+						provider,
+					},
+					recaptcha,
 				});
 				break;
 			default:
 				notFound();
 		}
-		return () => {
-			oauthVerify.current = false;
-		};
-	}, [code, githubMutate, googleMutate, provider]);
+		// Do whatever you want with the token
+	}, [code, executeRecaptcha, githubMutate, googleMutate, provider, router]);
+
+	useEffect(() => {
+		handleReCaptchaVerify();
+	}, [handleReCaptchaVerify]);
 
 	return (
 		<>
 			<Breadcrumb title={`${provider} OAuth Verify`} />
 			<Card className="w-[90%] xl:w-[30%] mx-auto my-10">
 				<CardHeader className="p-3">
-					<CardTitle className="text-2xl capitalize text-center flex items-center justify-center gap-2">
-						{provider} OAuth Verifying
-					</CardTitle>
-					<CardDescription className="text-center">
-						Please wait while we verify your {provider} account to continue
-					</CardDescription>
+					<CardTitle className="text-2xl capitalize text-center flex items-center justify-center gap-2">{provider} OAuth Verifying</CardTitle>
+					<CardDescription className="text-center">Please wait while we verify your {provider} account to continue</CardDescription>
 				</CardHeader>
 				<div className="divider" />
 				<CardContent className="grid gap-5 p-5 items-center justify-center">
