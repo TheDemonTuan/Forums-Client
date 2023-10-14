@@ -36,7 +36,7 @@ const ConfirmDialog = (props: Props) => {
 					</AlertDialogHeader>
 					<AlertDialogFooter>
 						<AlertDialogCancel onClick={() => setDialog(false)}>Cancel</AlertDialogCancel>
-						<AlertDialogAction onClick={handleConfirm} className="bg-forum_pink hover:bg-forum_white hover:opacity-90 hover:text-forum_pink">
+						<AlertDialogAction onClick={handleConfirm} className="bg-forum_pink hover:bg-forum_white hover:opacity-90 hover:text-forum_pink focus">
 							Continue
 						</AlertDialogAction>
 					</AlertDialogFooter>

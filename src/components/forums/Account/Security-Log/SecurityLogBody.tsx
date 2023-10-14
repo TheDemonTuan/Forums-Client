@@ -2,7 +2,7 @@
 "use client";
 
 import React, { memo, useEffect } from "react";
-import { SessionsResponse, sessionsAccount } from "@/lib/accountApi";
+import { SecurityLogResponse, securityLogAccount } from "@/lib/accountApi";
 import { ApiErrorResponse } from "@/utils/http";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -19,30 +19,29 @@ const SessionsBody = () => {
   const queryClient = useQueryClient();
 
   const {
-    data: sessionsData,
-    error: sessionsError,
-    isFetching: sessionsIsFetching,
-    isError: sessionsIsError,
-  } = useQuery<SessionsResponse[], ApiErrorResponse>({
-    queryKey: ["account", "sessions"],
-    queryFn: async ({ signal }) => await sessionsAccount(signal),
+    data: securityLogData,
+    error: securityLogError,
+    isFetching: securityLogIsFetching,
+    isError: securityLogIsError,
+  } = useQuery<SecurityLogResponse[], ApiErrorResponse>({
+    queryKey: ["account", "security-log"],
+    queryFn: async ({ signal }) => await securityLogAccount(signal),
     staleTime: 1000 * 30,
   });
 
   useEffect(() => {
     return () => {
-      queryClient.removeQueries(["account", "session"]);
-      queryClient.cancelQueries(["account", "sessions"]);
+      queryClient.cancelQueries(["account", "security-log"]);
     };
   }, [queryClient]);
 
   useEffect(() => {
-    if (sessionsIsError) {
-      toast.error(getErrorMessage(sessionsError, "Get sessions failed!"));
+    if (securityLogIsError) {
+      toast.error(getErrorMessage(securityLogError, "Get security log failed!"));
     }
-  }, [sessionsIsError, sessionsError]);
+  }, [securityLogIsError, securityLogError]);
 
-  if (sessionsIsFetching)
+  if (securityLogIsFetching)
     return (
       <>
         <SessionsBodySkeleton />
@@ -54,34 +53,23 @@ const SessionsBody = () => {
       </>
     );
 
-  if (sessionsIsError) {
-    return <SessionsBodyError />;
-  }
+  if (securityLogIsError) return <SessionsBodyError />;
 
-  return sessionsData?.map((session, index) => (
-    <TableRow key={session?.id}>
-      <TableCell className="space-y-2">
-        {session?.id}
-        <br />
-        {session?.is_active && (
-          <div className="flex items-center gap-2">
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500" />
-            </span>
-            <span className="relative badge badge-ghost badge-sm">
-              {!index ? "Your current session" : "Online"}
-            </span>
-          </div>
-        )}
-      </TableCell>
-      <TableCell>{session?.ip}</TableCell>
-      <TableCell>{session?.status ? "Active" : "Inactive"}</TableCell>
-      <TableCell>{new Date(session?.created_at).toLocaleString()}</TableCell>
+  return securityLogData?.map((securityLog, index) => (
+    <TableRow key={securityLog?.id}>
+      <TableCell>{index + 1}</TableCell>
+      <TableCell>{securityLog?.browser}</TableCell>
+      <TableCell>{securityLog?.device}</TableCell>
+      <TableCell className="capitalize">{securityLog?.device_type}</TableCell>
+      <TableCell>{securityLog?.engine}</TableCell>
+      <TableCell>{securityLog?.os}</TableCell>
+      <TableCell>{securityLog?.cpu}</TableCell>
+      <TableCell>{securityLog?.ip}</TableCell>
+      <TableCell>{new Date(securityLog?.created_at).toLocaleString()}</TableCell>
       <TableCell className="text-center">
         <Link
           className="hover:opacity-80 hover:text-forum_pink"
-          href={pathname.concat("/", session?.id)}
+          href={pathname.concat("/", securityLog?.id?.toString())}
         >
           <ForumButtonOutline>See more</ForumButtonOutline>
         </Link>

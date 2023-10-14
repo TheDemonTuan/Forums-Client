@@ -17,7 +17,7 @@ const Sessions = () => {
 		<>
 			<Table>
 				<TableCaption className="space-y-5">
-					This is a list of devices that have logged into your account. Revoke any sessions that you do not recognize.
+					This is a list of sessions that have been used to log into your account. Revoke any sessions that you do not recognize.
 					<br />
 					<RevokeALl />
 				</TableCaption>
