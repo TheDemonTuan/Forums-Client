@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { ValidateLoginFormSchema, ValidateLoginForm } from "./login-form.validate";
+import { AuthValidateLoginFormSchema, AuthValidateLoginForm } from "./login-form.validate";
 import _ from "lodash";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LoginAuthBody, AuthResponse, loginAuth, LoginAuthParams } from "@/lib/authApi";
@@ -47,15 +47,24 @@ const LoginForm = () => {
     mutationFn: async (params) => await loginAuth(params),
   });
 
+<<<<<<< HEAD
+  const loginForm = useForm<AuthValidateLoginForm>({
+    resolver: zodResolver(AuthValidateLoginFormSchema),
+=======
   const loginForm = useForm<ValidateLoginForm>({
     resolver: zodResolver(ValidateLoginFormSchema),
+>>>>>>> c58e3b02d0443a4187075c7d2b23c9a1cc4122d4
     defaultValues: {
       username: "",
       password: "",
     },
   });
 
+<<<<<<< HEAD
+  const handleLogin = (values: AuthValidateLoginForm) => {
+=======
   const handleLogin = (values: ValidateLoginForm) => {
+>>>>>>> c58e3b02d0443a4187075c7d2b23c9a1cc4122d4
     setDialog(true);
     setValues(values);
   };

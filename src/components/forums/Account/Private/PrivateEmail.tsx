@@ -7,9 +7,13 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import PrivateEmailForm from "./PrivateEmailForm";
+import dynamic from "next/dynamic";
 
-const Email = () => {
+const PrivateEmailForm = dynamic(() => import("./PrivateEmailForm"), {
+	loading: () => <p>Loading...</p>,
+  });
+
+const PrivateEmail = () => {
 	return (
 		<Card className="w-full">
 			<CardHeader>
@@ -25,4 +29,4 @@ const Email = () => {
 	);
 };
 
-export default Email;
+export default PrivateEmail;

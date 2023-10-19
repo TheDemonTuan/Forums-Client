@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ValidatePrivateUserNameFormSchema = z
+export const PrivateValidateUserNameFormSchema = z
 	.object({
 		new_username: z
 			.string()
@@ -37,4 +37,4 @@ export const ValidatePrivateUserNameFormSchema = z
 		message: "New username and confirm new username must match",
 		path: ["confirm_new_username"],
 	});
-export type ValidatePrivateUserNameForm = z.infer<typeof ValidatePrivateUserNameFormSchema>;
+export type PrivateValidateUserNameForm = z.infer<typeof PrivateValidateUserNameFormSchema>;

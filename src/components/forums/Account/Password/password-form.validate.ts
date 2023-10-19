@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ValidatePasswordFormSchema = z
+export const PasswordValidateFormSchema = z
 	.object({
 		old_password: z
 			.string()
@@ -35,4 +35,4 @@ export const ValidatePasswordFormSchema = z
 		message: "New password and confirm new password must match",
 		path: ["confirm_new_password"],
 	});
-export type ValidatePasswordForm = z.infer<typeof ValidatePasswordFormSchema>;
+export type PrivateValidatePasswordForm = z.infer<typeof PasswordValidateFormSchema>;

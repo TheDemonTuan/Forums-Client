@@ -1,8 +1,8 @@
-import Email from "@/components/forums/Account/Private/Email";
-import UserName from "@/components/forums/Account/Private/UserName";
 import React from "react";
 import { AiFillWarning } from "react-icons/ai";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import PrivateUserName from "@/components/forums/Account/Private/PrivateUserName";
+import PrivateEmail from "@/components/forums/Account/Private/PrivateEmail";
 
 const Private = () => {
 	return (
@@ -13,8 +13,8 @@ const Private = () => {
 				<AlertDescription>Careful before change your private information !</AlertDescription>
 			</Alert>
 			<div className="grid grid-flow-row lg:grid-flow-col gap-12 lg:gap-28">
-				<UserName />
-				<Email />
+				<PrivateUserName />
+				<PrivateEmail />
 			</div>
 		</>
 	);

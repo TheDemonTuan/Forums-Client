@@ -13,7 +13,7 @@ import { ApiErrorResponse } from "@/utils/http";
 import { ForumButtonOutline } from "../../Button";
 import { PrivateUserNameAccountBody, privateUserNameAccount } from "@/lib/accountApi";
 import { useAuth } from "@/hooks/useAuth";
-import { ValidatePrivateUserNameForm, ValidatePrivateUserNameFormSchema } from "./private-username-form.validate";
+import { PrivateValidateUserNameForm, PrivateValidateUserNameFormSchema } from "./private-username-form.validate";
 import ConfirmDialog from "@/components/forums/ConfirmDialog";
 import { BiError } from "react-icons/bi";
 
@@ -21,7 +21,7 @@ const PrivateUserNameForm = () => {
 	const queryClient = useQueryClient();
 	const { data: authData } = useAuth();
 	const [dialog, setDialog] = React.useState<boolean>(false);
-	const [values, setValues] = React.useState<ValidatePrivateUserNameForm>({
+	const [values, setValues] = React.useState<PrivateValidateUserNameForm>({
 		new_username: "",
 		confirm_new_username: "",
 		confirm_password: "",
@@ -39,15 +39,15 @@ const PrivateUserNameForm = () => {
 		},
 	});
 
-	const privateUserNameForm = useForm<ValidatePrivateUserNameForm>({
-		resolver: zodResolver(ValidatePrivateUserNameFormSchema),
+	const privateUserNameForm = useForm<PrivateValidateUserNameForm>({
+		resolver: zodResolver(PrivateValidateUserNameFormSchema),
 		defaultValues: {
 			new_username: "",
 			confirm_new_username: "",
 			confirm_password: authData?.oauth === OAuthProviders.DEFAULT ? "" : "********",
 		},
 	});
-	const handlePrivateUserName = async (values: ValidatePrivateUserNameForm) => {
+	const handlePrivateUserName = async (values: PrivateValidateUserNameForm) => {
 		setValues(values);
 		setDialog((prev) => !prev);
 	};

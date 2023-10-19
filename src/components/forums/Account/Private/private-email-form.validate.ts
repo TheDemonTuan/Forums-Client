@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ValidatePrivateEmailFormSchema = z
+export const PrivateValidateEmailFormSchema = z
 	.object({
 		new_email: z.string().email({ message: "New email must be a valid email address." }).max(50, {
 			message: "New email must be shorter than or equal to 50 characters.",
@@ -24,4 +24,4 @@ export const ValidatePrivateEmailFormSchema = z
 		message: "New email and confirm new email must match",
 		path: ["confirm_new_email"],
 	});
-export type ValidatePrivateEmailForm = z.infer<typeof ValidatePrivateEmailFormSchema>;
+export type PrivateValidateEmailForm = z.infer<typeof PrivateValidateEmailFormSchema>;

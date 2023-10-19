@@ -9,7 +9,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import SocialButton from "@/components/forums/Auth/SocialButton";
-import RegisterForm from "@/components/forums/Auth/Register/RegisterForm";
+import dynamic from "next/dynamic";
+
+const RegisterForm = dynamic(() => import("@/components/forums/Auth/Register/RegisterForm"), {
+  loading: () => <p>Loading...</p>,
+});
 
 const Register = () => {
   return (

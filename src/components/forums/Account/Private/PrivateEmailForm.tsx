@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AuthResponse, OAuthProviders } from "@/lib/authApi";
 import { ApiErrorResponse } from "@/utils/http";
 import { ForumButtonOutline } from "../../Button";
-import { ValidatePrivateEmailForm, ValidatePrivateEmailFormSchema } from "./private-email-form.validate";
+import { PrivateValidateEmailForm, PrivateValidateEmailFormSchema } from "./private-email-form.validate";
 import { PrivateEmailAccountBody, privateEmailAccount } from "@/lib/accountApi";
 import { useAuth } from "@/hooks/useAuth";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -22,7 +22,7 @@ const PrivateEmailForm = () => {
 	const queryClient = useQueryClient();
 	const { data: authData } = useAuth();
 	const [dialog, setDialog] = React.useState<boolean>(false);
-	const [values, setValues] = React.useState<ValidatePrivateEmailForm>({
+	const [values, setValues] = React.useState<PrivateValidateEmailForm>({
 		new_email: "",
 		confirm_new_email: "",
 		confirm_password: "",
@@ -40,15 +40,15 @@ const PrivateEmailForm = () => {
 		},
 	});
 
-	const privateEmailForm = useForm<ValidatePrivateEmailForm>({
-		resolver: zodResolver(ValidatePrivateEmailFormSchema),
+	const privateEmailForm = useForm<PrivateValidateEmailForm>({
+		resolver: zodResolver(PrivateValidateEmailFormSchema),
 		defaultValues: {
 			new_email: "",
 			confirm_new_email: "",
 			confirm_password: "",
 		},
 	});
-	const handlePrivateEmail = async (values: ValidatePrivateEmailForm) => {
+	const handlePrivateEmail = async (values: PrivateValidateEmailForm) => {
 		setValues(values);
 		setDialog((prev) => !prev);
 	};

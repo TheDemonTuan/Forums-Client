@@ -13,7 +13,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+<<<<<<< HEAD
+import { AuthValidateRegisterForm, AuthValidateRegisterFormSchema } from "./register-form.validate";
+=======
 import { ValidateRegisterForm, ValidateRegisterFormSchema } from "./register-form.validate";
+>>>>>>> c58e3b02d0443a4187075c7d2b23c9a1cc4122d4
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import _ from "lodash";
@@ -49,8 +53,13 @@ const RegisterForm = () => {
     mutationFn: async (params) => await registerAuth(params),
   });
 
+<<<<<<< HEAD
+  const registerForm = useForm<AuthValidateRegisterForm>({
+    resolver: zodResolver(AuthValidateRegisterFormSchema),
+=======
   const registerForm = useForm<ValidateRegisterForm>({
     resolver: zodResolver(ValidateRegisterFormSchema),
+>>>>>>> c58e3b02d0443a4187075c7d2b23c9a1cc4122d4
     defaultValues: {
       email: "",
       username: "",
@@ -59,7 +68,11 @@ const RegisterForm = () => {
     },
   });
 
+<<<<<<< HEAD
+  const handleRegister = (values: AuthValidateRegisterForm) => {
+=======
   const handleRegister = (values: ValidateRegisterForm) => {
+>>>>>>> c58e3b02d0443a4187075c7d2b23c9a1cc4122d4
     setDialog(true);
     setValues(values);
   };

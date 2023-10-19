@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ValidatePasswordForm, ValidatePasswordFormSchema } from "./password-form.validate";
+import { PrivateValidatePasswordForm, PasswordValidateFormSchema } from "./password-form.validate";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -23,15 +23,15 @@ import { getErrorMessage } from "@/utils/getErrorMessage";
 const PasswordForm = () => {
 	const { data: authData } = useAuth();
 	const [dialog, setDialog] = useState<boolean>(false);
-	const [values, setValues] = React.useState<ValidatePasswordForm>({
+	const [values, setValues] = React.useState<PrivateValidatePasswordForm>({
 		old_password: "",
 		new_password: "",
 		confirm_new_password: "",
 	});
 	const queryClient = useQueryClient();
 
-	const passwordForm = useForm<ValidatePasswordForm>({
-		resolver: zodResolver(ValidatePasswordFormSchema),
+	const passwordForm = useForm<PrivateValidatePasswordForm>({
+		resolver: zodResolver(PasswordValidateFormSchema),
 		defaultValues: {
 			old_password: "",
 			new_password: "",
@@ -49,7 +49,7 @@ const PasswordForm = () => {
 		mutationFn: async (body) => await passwordAccount(body),
 	});
 
-	const handlePassword = async (values: ValidatePasswordForm) => {
+	const handlePassword = async (values: PrivateValidatePasswordForm) => {
 		setValues(values);
 		setDialog((prev) => !prev);
 	};
