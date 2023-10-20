@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-<<<<<<< HEAD
 import SocialButton from "@/components/forums/Auth/SocialButton";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
@@ -16,11 +15,6 @@ import dynamic from "next/dynamic";
 const LoginForm = dynamic(() => import("@/components/forums/Auth/Login/LoginForm"), {
   loading: () => <p>Loading...</p>,
 });
-=======
-import LoginForm from "@/components/forums/Auth/Login/LoginForm";
-import SocialButton from "@/components/forums/Auth/SocialButton";
-import { Metadata, ResolvingMetadata } from "next";
->>>>>>> c58e3b02d0443a4187075c7d2b23c9a1cc4122d4
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

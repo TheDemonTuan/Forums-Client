@@ -1,14 +1,14 @@
 import http from "@/utils/http";
 import { AuthResponse } from "./authApi";
 
-export interface PasswordAccountBody {
+export interface PrivatePasswordAccountBody {
   old_password: string;
   new_password: string;
   confirm_new_password: string;
 }
 
-export const passwordAccount = async (body: PasswordAccountBody) =>
-  http.put<AuthResponse>("account/password", body).then((res) => res.data);
+export const privatePasswordAccount = async (body: PrivatePasswordAccountBody) =>
+  http.put<AuthResponse>("account/private/password", body).then((res) => res.data);
 
 export interface PrivateEmailAccountBody {
   new_email: string;
@@ -32,15 +32,15 @@ export const privateUserNameAccount = async (
     .put<AuthResponse>("account/private/username", body)
     .then((res) => res.data);
 
-export interface PublicBody {
+export interface ProfileBody {
   display_name: string;
   about: string;
   avatar: File | null;
 }
 
-export const publicAccount = async (body: PublicBody) =>
+export const profileAccount = async (body: ProfileBody) =>
   http
-    .put<AuthResponse>("account/public", body, {
+    .put<AuthResponse>("account/profile", body, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -51,7 +51,7 @@ export interface SessionsResponse {
   id: string;
   user_id: string;
   ip: string;
-  status: boolean;
+  status: string;
   is_active: boolean;
   created_at: Date;
 }

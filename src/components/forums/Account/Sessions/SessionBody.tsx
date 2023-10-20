@@ -2,7 +2,7 @@
 "use client";
 
 import React, { memo, useEffect } from "react";
-import { SessionsResponse, sessionsAccount } from "@/lib/accountApi";
+import { SessionsResponse, sessionsAccount } from "@/lib/api/accountApi";
 import { ApiErrorResponse } from "@/utils/http";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";

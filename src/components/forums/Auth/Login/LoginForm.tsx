@@ -17,13 +17,13 @@ import { useRouter } from "next/navigation";
 import { AuthValidateLoginFormSchema, AuthValidateLoginForm } from "./login-form.validate";
 import _ from "lodash";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { LoginAuthBody, AuthResponse, loginAuth, LoginAuthParams } from "@/lib/authApi";
+import { LoginAuthBody, AuthResponse, loginAuth, LoginAuthParams } from "@/lib/api/authApi";
 import { ApiErrorResponse } from "@/utils/http";
 import { ForumButtonOutline } from "../../Button";
 import { useGoogleRecaptchaV3 } from "@/hooks/useGoogleRecaptcha";
 import ConfirmDialog from "../../ConfirmDialog";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import { useAuthStore } from "@/lib/authStore";
+import { useAuthStore } from "@/lib/store/authStore";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -41,30 +41,21 @@ const LoginForm = () => {
     data: loginData,
     error: loginError,
     isSuccess: loginIsSuccess,
-    isLoading: loginIsLoading,
+    isPending: loginIsPending,
     isError: loginIsError,
   } = useMutation<AuthResponse, ApiErrorResponse, LoginAuthParams>({
     mutationFn: async (params) => await loginAuth(params),
   });
 
-<<<<<<< HEAD
   const loginForm = useForm<AuthValidateLoginForm>({
     resolver: zodResolver(AuthValidateLoginFormSchema),
-=======
-  const loginForm = useForm<ValidateLoginForm>({
-    resolver: zodResolver(ValidateLoginFormSchema),
->>>>>>> c58e3b02d0443a4187075c7d2b23c9a1cc4122d4
     defaultValues: {
       username: "",
       password: "",
     },
   });
 
-<<<<<<< HEAD
   const handleLogin = (values: AuthValidateLoginForm) => {
-=======
-  const handleLogin = (values: ValidateLoginForm) => {
->>>>>>> c58e3b02d0443a4187075c7d2b23c9a1cc4122d4
     setDialog(true);
     setValues(values);
   };
@@ -105,6 +96,8 @@ const LoginForm = () => {
     if (loginIsSuccess || loginIsError) setCardDisableStatus(false);
   }, [loginIsSuccess, loginIsError, setCardDisableStatus]);
 
+  const buttonIsLoading = loginIsPending || recaptchaIsLoading;
+
   return (
     <>
       <ConfirmDialog
@@ -143,15 +136,9 @@ const LoginForm = () => {
               </FormItem>
             )}
           />
-          <ForumButtonOutline
-            type="submit"
-            className="w-full"
-            disabled={loginIsLoading || recaptchaIsLoading}
-          >
-            {(loginIsLoading || recaptchaIsLoading) && (
-              <span className="loading loading-spinner loading-xs mr-2" />
-            )}
-            {!loginIsLoading && !recaptchaIsLoading ? "Login" : "Loading..."}
+          <ForumButtonOutline type="submit" className="w-full" disabled={buttonIsLoading}>
+            {buttonIsLoading && <span className="loading loading-spinner loading-xs mr-2" />}
+            {!buttonIsLoading ? "Login" : "Loading..."}
           </ForumButtonOutline>
         </form>
       </Form>

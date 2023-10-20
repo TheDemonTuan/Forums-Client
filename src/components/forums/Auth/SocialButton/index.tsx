@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { BsGithub } from "react-icons/bs";
 import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/lib/authStore";
+import { useAuthStore } from "@/lib/store/authStore";
 
 const SocialButton = () => {
   const router = useRouter();

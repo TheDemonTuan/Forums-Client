@@ -9,7 +9,7 @@ import {
   SessionsResponse,
   sessionAccountRevokeAll,
   sessionsAccount,
-} from "@/lib/accountApi";
+} from "@/lib/api/accountApi";
 import { toast } from "react-toastify";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { ApiErrorResponse } from "@/utils/http";

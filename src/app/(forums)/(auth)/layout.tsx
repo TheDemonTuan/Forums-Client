@@ -3,7 +3,7 @@
 import Breadcrumb from "@/components/forums/Breadcrumb";
 import { Card } from "@/components/ui/card";
 import { usePreventRoute } from "@/hooks/usePreventRoute";
-import { useAuthStore } from "@/lib/authStore";
+import { useAuthStore } from "@/lib/store/authStore";
 import React from "react";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 

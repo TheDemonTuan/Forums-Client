@@ -12,11 +12,11 @@ import {
 } from "@/components/ui/card";
 import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AuthResponse, oauthAuth, OAuthAuthParams } from "@/lib/authApi";
+import { AuthResponse, oauthAuth, OAuthAuthParams } from "@/lib/api/authApi";
 import { ApiErrorResponse } from "@/utils/http";
 import _ from "lodash";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import { useAuthStore } from "@/lib/authStore";
+import { useAuthStore } from "@/lib/store/authStore";
 
 const OAuthVerify = ({ params }: { params: { provider: string } }) => {
   const searchParams = useSearchParams();
@@ -26,7 +26,7 @@ const OAuthVerify = ({ params }: { params: { provider: string } }) => {
   const queryClient = useQueryClient();
   const { executeRecaptcha } = useGoogleReCaptcha();
   const { setAuthTitle, setCardDisableStatus } = useAuthStore();
-
+  
   //* Google OAuth
   const {
     data: googleData,
@@ -71,7 +71,7 @@ const OAuthVerify = ({ params }: { params: { provider: string } }) => {
   });
 
   useEffect(() => {
-    setCardDisableStatus(true);
+    setCardDisableStatus(false);
     setAuthTitle(provider + " OAuth Verifying");
   }, [provider, setAuthTitle, setCardDisableStatus]);
 

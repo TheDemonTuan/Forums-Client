@@ -1,6 +1,6 @@
 "use client";
 
-import { SessionResponse, SessionRevokeBody, SessionRevokeResponse, sessionAccount, sessionAccountRevoke } from "@/lib/accountApi";
+import { SessionResponse, SessionRevokeBody, SessionRevokeResponse, sessionAccount, sessionAccountRevoke } from "@/lib/api/accountApi";
 import { ApiErrorResponse } from "@/utils/http";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useRef } from "react";

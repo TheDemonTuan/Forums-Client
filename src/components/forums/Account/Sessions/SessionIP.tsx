@@ -1,4 +1,4 @@
-import { SessionIpResponse, SessionResponse, sessionIpAccount } from "@/lib/accountApi";
+import { SessionIpResponse, SessionResponse, sessionIpAccount } from "@/lib/api/accountApi";
 import { ApiErrorResponse } from "@/utils/http";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { memo, useEffect } from "react";

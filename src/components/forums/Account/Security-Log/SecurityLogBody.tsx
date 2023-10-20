@@ -2,7 +2,7 @@
 "use client";
 
 import React, { memo, useEffect } from "react";
-import { SecurityLogResponse, securityLogAccount } from "@/lib/accountApi";
+import { SecurityLogResponse, securityLogAccount } from "@/lib/api/accountApi";
 import { ApiErrorResponse } from "@/utils/http";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -31,7 +31,9 @@ const SessionsBody = () => {
 
   useEffect(() => {
     return () => {
-      queryClient.cancelQueries(["account", "security-log"]);
+      queryClient.cancelQueries({
+        queryKey: ["account", "security-log"],
+      });
     };
   }, [queryClient]);
 
