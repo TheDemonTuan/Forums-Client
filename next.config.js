@@ -6,9 +6,9 @@ const nextConfig = {
   images: {
     domains: ["avatars.githubusercontent.com"],
   },
-  compiler: {
-    removeConsole: true,
-  },
+  // compiler: {
+  //   removeConsole: true,
+  // },
 };
 
 module.exports = nextConfig;

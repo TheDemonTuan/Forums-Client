@@ -26,7 +26,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { BiError } from "react-icons/bi";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import ConfirmDialog from "@/components/forums/ConfirmDialog";
-import { useAccountStore } from "@/lib/store/accountStore";
+import { useAccountPrivateStore } from "@/lib/store/accountStore";
 
 const PrivatePasswordForm = () => {
   const queryClient = useQueryClient();
@@ -45,7 +45,7 @@ const PrivatePasswordForm = () => {
       confirm_new_password: "",
     },
   });
-  const { setIsFormHandle } = useAccountStore();
+  const { setIsFormHandle } = useAccountPrivateStore();
 
   const { mutate: privatePasswordMutate, isPending: privatePasswordIsPending } = useMutation<
     AuthResponse,

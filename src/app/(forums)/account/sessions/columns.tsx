@@ -43,11 +43,9 @@ export const columns: ColumnDef<SessionsResponse>[] = [
     accessorKey: "status",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
     cell: (row) => {
-      const status = statuses.find((s) => s?.value === row.getValue<string>());
+      const status = statuses.find((s) => s?.value === row.getValue<boolean>().toString());
 
-      if (!status) {
-        return null;
-      }
+      if (!status) return null;
 
       return (
         <div className="flex w-[100px] items-center">
@@ -57,8 +55,7 @@ export const columns: ColumnDef<SessionsResponse>[] = [
       );
     },
     filterFn: (row, id, value) => {
-      // console.log(id);
-      return value.includes(row.getValue(id));
+      return value.includes(row.getValue<boolean>(id).toString());
     },
   },
   {

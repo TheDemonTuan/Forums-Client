@@ -1,6 +1,8 @@
 import http from "@/utils/http";
 import { AuthResponse } from "./authApi";
 
+const APIKey = ["account"];
+
 export interface PrivatePasswordAccountBody {
   old_password: string;
   new_password: string;
@@ -25,12 +27,8 @@ export interface PrivateUserNameAccountBody {
   confirm_password?: string;
 }
 
-export const privateUserNameAccount = async (
-  body: PrivateUserNameAccountBody
-) =>
-  http
-    .put<AuthResponse>("account/private/username", body)
-    .then((res) => res.data);
+export const privateUserNameAccount = async (body: PrivateUserNameAccountBody) =>
+  http.put<AuthResponse>("account/private/username", body).then((res) => res.data);
 
 export interface ProfileBody {
   display_name: string;
@@ -56,10 +54,10 @@ export interface SessionsResponse {
   created_at: Date;
 }
 
+export const SessionsKey = [...APIKey, "sessions"];
+
 export const sessionsAccount = async (signal: AbortSignal | undefined) =>
-  http
-    .get<SessionsResponse[]>("account/sessions", { signal })
-    .then((res) => res.data);
+  http.get<SessionsResponse[]>("account/sessions", { signal }).then((res) => res.data);
 
 export interface SessionResponse {
   id: string;
@@ -71,12 +69,20 @@ export interface SessionResponse {
   is_current: boolean;
 }
 
-export const sessionAccount = async (
-  id: string,
-  signal: AbortSignal | undefined
-) =>
+export const sessionAccount = async (id: string, signal: AbortSignal | undefined) =>
+  http.get<SessionResponse>(`account/session/${id}`, { signal }).then((res) => res.data);
+
+export interface SessionRevokeSelectedResponse {
+  message: string;
+}
+
+export const SessionRevokeSelectedKey = [...SessionsKey, "revoke", "selected"];
+
+export const sessionAccountRevokeSelected = async (body: string[]) =>
   http
-    .get<SessionResponse>(`account/session/${id}`, { signal })
+    .delete<SessionRevokeSelectedResponse>(`account/session/revoke/selected`, {
+      data: body,
+    })
     .then((res) => res.data);
 
 export interface SessionIpResponse {
@@ -106,13 +112,8 @@ export interface SessionIpResponse {
   query: string;
 }
 
-export const sessionIpAccount = async (
-  ip: string,
-  signal: AbortSignal | undefined
-) =>
-  http
-    .get<SessionIpResponse>(`account/session/ip/${ip}`, { signal })
-    .then((res) => res.data);
+export const sessionIpAccount = async (ip: string, signal: AbortSignal | undefined) =>
+  http.get<SessionIpResponse>(`account/session/ip/${ip}`, { signal }).then((res) => res.data);
 
 export interface SessionRevokeResponse {
   message: string;

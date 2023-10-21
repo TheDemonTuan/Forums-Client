@@ -22,7 +22,7 @@ import { PrivateUserNameAccountBody, privateUserNameAccount } from "@/lib/api/ac
 import { useAuth } from "@/hooks/useAuth";
 import { UserNameFormType, UserNameFormSchema } from "./private-username-form.validate";
 import ConfirmDialog from "@/components/forums/ConfirmDialog";
-import { useAccountStore } from "@/lib/store/accountStore";
+import { useAccountPrivateStore } from "@/lib/store/accountStore";
 
 const PrivateUserNameForm = () => {
   const queryClient = useQueryClient();
@@ -33,7 +33,7 @@ const PrivateUserNameForm = () => {
     confirm_new_username: "",
     confirm_password: "",
   });
-  const { setIsFormHandle } = useAccountStore();
+  const { setIsFormHandle } = useAccountPrivateStore();
 
   const { isPending: privateUserNameIsPending, mutate: privateUserNameMutate } = useMutation<
     AuthResponse,

@@ -24,7 +24,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { BiError } from "react-icons/bi";
 import ConfirmDialog from "@/components/forums/ConfirmDialog";
-import { useAccountStore } from "@/lib/store/accountStore";
+import { useAccountPrivateStore } from "@/lib/store/accountStore";
 
 const PrivateEmailForm = () => {
   const queryClient = useQueryClient();
@@ -35,7 +35,7 @@ const PrivateEmailForm = () => {
     confirm_new_email: "",
     confirm_password: "",
   });
-  const { setIsFormHandle } = useAccountStore();
+  const { setIsFormHandle } = useAccountPrivateStore();
 
   const { isPending: privateEmailIsPending, mutate: privateEmailMutate } = useMutation<
     AuthResponse,

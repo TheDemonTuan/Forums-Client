@@ -16,7 +16,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import dynamic from "next/dynamic";
-import { useAccountStore } from "@/lib/store/accountStore";
+import { useAccountPrivateStore } from "@/lib/store/accountStore";
 
 const PrivateUserNameForm = dynamic(
   () => import("@/components/forums/Account/Private/UserName/PrivateUserNameForm"),
@@ -59,7 +59,7 @@ const privateData = [
 ];
 
 const Private = () => {
-  const { isFormHandle } = useAccountStore();
+  const { isFormHandle } = useAccountPrivateStore();
   return (
     <>
       <Alert variant="warning" className="my-5">
