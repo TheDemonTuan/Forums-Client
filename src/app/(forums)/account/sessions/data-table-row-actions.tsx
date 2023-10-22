@@ -20,7 +20,7 @@ import {
 import { GrView } from "react-icons/gr";
 import { statuses } from "./data";
 import { sessionsSchema } from "./schema";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import ConfirmDialog from "@/components/forums/ConfirmDialog";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -33,6 +33,7 @@ import {
 import { ApiErrorResponse } from "@/utils/http";
 import { toast } from "react-toastify";
 import { getErrorMessage } from "@/utils/getErrorMessage";
+import Link from "next/link";
 
 // import { labels } from "../data/data"
 // import { taskSchema } from "../data/schema"
@@ -46,6 +47,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
   const router = useRouter();
   const queryClient = useQueryClient();
   const [dialog, setDialog] = useState<boolean>(false);
+  const pathname = usePathname();
 
   const handleSeeMore = () => {};
 
@@ -96,13 +98,12 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem
-            className="flex items-center gap-1"
-            onClick={() => router.push(sessions?.id)}
-          >
-            <GrView />
-            See More
-          </DropdownMenuItem>
+          <Link href={pathname?.concat("/", sessions?.id)}>
+            <DropdownMenuItem className="flex items-center gap-1">
+              <GrView />
+              See More
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuSeparator />
           {/* <DropdownMenuSub>
           <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>

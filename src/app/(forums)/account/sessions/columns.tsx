@@ -84,7 +84,7 @@ export const columns: ColumnDef<SessionsResponse>[] = [
               }`}
             />
           </span>
-          <span className="relative badge badge-ghost badge-sm">
+          <span className="relative md:badge md:badge-ghost md:badge-sm">
             {!row.index ? "Your current session" : isOnline ? "Online" : "Offline"}
           </span>
         </div>

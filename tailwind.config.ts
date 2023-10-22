@@ -97,6 +97,7 @@ module.exports = {
 				"accordion-up": "accordion-up 0.2s ease-out",
 			},
 			screens: {
+				md_max: { max: "767px" },
 				lg_max: { max: "1023px" },
 			},
 		},
