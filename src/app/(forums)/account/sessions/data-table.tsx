@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/table"
 import { DataTablePagination } from "@/components/common/data-table/data-table-pagination"
 import { DataTableToolbar } from "./data-table-toolbar"
-import { DataTableRevokeSelected } from "./data-table-revoke-selected"
+import { DataTableRevoke } from "./data-table-revoke"
 
 
 interface DataTableProps<TData, TValue> {
@@ -121,7 +121,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTableRevokeSelected table={table} />
+      <DataTableRevoke table={table} />
       <DataTablePagination table={table} />
     </div>
   )

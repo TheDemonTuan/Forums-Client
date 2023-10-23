@@ -130,6 +130,8 @@ export interface SessionRevokeAllResponse {
   message: string;
 }
 
+export const SessionRevokeAllKey = [...SessionsKey, "revoke", "all"];
+
 export const sessionAccountRevokeAll = async () =>
   http.delete(`account/session/revoke/all`).then((res) => res.data);
 

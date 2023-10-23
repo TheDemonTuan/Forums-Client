@@ -2,7 +2,6 @@
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -18,15 +17,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { GrView } from "react-icons/gr";
-import { statuses } from "./data";
 import { sessionsSchema } from "./schema";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import ConfirmDialog from "@/components/forums/ConfirmDialog";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   SessionRevokeBody,
   SessionRevokeResponse,
+  SessionsKey,
   SessionsResponse,
   sessionAccountRevoke,
 } from "@/lib/api/accountApi";
@@ -35,21 +34,15 @@ import { toast } from "react-toastify";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import Link from "next/link";
 
-// import { labels } from "../data/data"
-// import { taskSchema } from "../data/schema"
-
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
 
 export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TData>) {
   const sessions = sessionsSchema.parse(row.original);
-  const router = useRouter();
   const queryClient = useQueryClient();
   const [dialog, setDialog] = useState<boolean>(false);
   const pathname = usePathname();
-
-  const handleSeeMore = () => {};
 
   const { mutate: sessionRevokeMutate } = useMutation<
     SessionRevokeResponse,
@@ -58,14 +51,14 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
   >({
     mutationFn: async (id) => await sessionAccountRevoke(id),
     onSuccess: () => {
-      const sessionsData = queryClient.getQueryData<SessionsResponse[]>(["account", "sessions"]);
+      const sessionsData = queryClient.getQueryData<SessionsResponse[]>([SessionsKey]);
       if (!sessionsData) {
         queryClient.invalidateQueries({
-          queryKey: ["account", "sessions"],
+          queryKey: [SessionsKey],
         });
       } else {
         queryClient.setQueryData<SessionsResponse[]>(
-          ["account", "sessions"],
+          [SessionsKey],
           sessionsData.filter((session) => session.id !== sessions?.id)
         );
       }
@@ -104,19 +97,6 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
               See More
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuSeparator />
-          {/* <DropdownMenuSub>
-          <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup value={sessions.status ? "Active" : "Inactive"}>
-              {statuses.map((status) => (
-                <DropdownMenuRadioItem key={status.value} value={status.value}>
-                  {status.label}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub> */}
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => setDialog(true)}>
             Revoke
