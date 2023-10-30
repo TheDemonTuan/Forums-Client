@@ -49,10 +49,12 @@ const Sessions = () => {
     <div className="space-y-4">
       <div className="flex items-center justify-between space-y-2">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Sessions Manager!</h2>
+          <h2 className="text-2xl font-bold tracking-tight">
+            {isTableHandle ? "Loading..." : "Sessions Manager!"}
+          </h2>
           <p className="text-muted-foreground">
-            This is a list of sessions that have been used to log into your account. Revoke any
-            sessions that you do not recognize.
+            {!isTableHandle &&
+              "This is a list of sessions that have been used to log into your account. Revoke any sessions that you do not recognize."}
           </p>
         </div>
       </div>

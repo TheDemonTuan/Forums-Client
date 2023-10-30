@@ -2,10 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  swcMinify: true,
-  images: {
-    domains: ["avatars.githubusercontent.com"],
-  },
+  // swcMinify: true,
   // compiler: {
   //   removeConsole: true,
   // },

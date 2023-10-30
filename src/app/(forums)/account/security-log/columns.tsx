@@ -77,8 +77,4 @@ export const columns: ColumnDef<SecurityLogResponse>[] = [
       return new Date(row.getValue<Date>()).toLocaleString();
     },
   },
-  {
-    id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
-  },
 ];

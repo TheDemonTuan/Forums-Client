@@ -18,11 +18,11 @@ import { Table } from "@tanstack/react-table";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
-interface DataTableRevokeSelectedProps<TData> {
+interface DataTableRevokeProps<TData> {
   table: Table<TData>;
 }
 
-export function DataTableRevoke<TData>({ table }: DataTableRevokeSelectedProps<TData>) {
+export function DataTableRevoke<TData>({ table }: DataTableRevokeProps<TData>) {
   const { setTableHandle } = useAccountSessionsStore();
   const [dialog, setDialog] = useState<boolean>(false);
   const queryClient = useQueryClient();
@@ -120,7 +120,7 @@ export function DataTableRevoke<TData>({ table }: DataTableRevokeSelectedProps<T
         onConfirm={handleConfirm}
       >
         This action cannot be undone. This will permanently delete this session and remove this
-        session from our servers..
+        session from our servers.
       </ConfirmDialog>
       <div className="flex items-center justify-center px-2">
         <Button

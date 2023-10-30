@@ -49,7 +49,7 @@ export interface SessionsResponse {
   id: string;
   user_id: string;
   ip: string;
-  status: string;
+  status: boolean;
   is_active: boolean;
   created_at: Date;
 }
@@ -59,13 +59,7 @@ export const SessionsKey = [...APIKey, "sessions"];
 export const sessionsAccount = async (signal: AbortSignal | undefined) =>
   http.get<SessionsResponse[]>("account/sessions", { signal }).then((res) => res.data);
 
-export interface SessionResponse {
-  id: string;
-  user_id: string;
-  ip: string;
-  status: boolean;
-  created_at: Date;
-  is_active: boolean;
+export interface SessionResponse extends SessionsResponse {
   is_current: boolean;
 }
 
@@ -134,6 +128,14 @@ export const SessionRevokeAllKey = [...SessionsKey, "revoke", "all"];
 
 export const sessionAccountRevokeAll = async () =>
   http.delete(`account/session/revoke/all`).then((res) => res.data);
+
+export interface SessionStatusChangeBody {
+  id: string;
+  status: boolean;
+}
+
+export const sessionAccountStatusChange = async (body: SessionStatusChangeBody) =>
+  http.put(`account/session/status/${body?.id}/${body?.status}`).then((res) => res.data);
 
 export interface SecurityLogResponse {
   id: number;

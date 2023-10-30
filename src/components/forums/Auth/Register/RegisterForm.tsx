@@ -18,7 +18,12 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { RegisterAuthBody, AuthResponse, registerAuth, RegisterAuthParams } from "@/lib/api/authApi";
+import {
+  RegisterAuthBody,
+  AuthResponse,
+  registerAuth,
+  RegisterAuthParams,
+} from "@/lib/api/authApi";
 import { ApiErrorResponse } from "@/utils/http";
 import { ForumButtonOutline } from "@/components/forums/Button";
 import { useGoogleRecaptchaV3 } from "@/hooks/useGoogleRecaptcha";
@@ -43,7 +48,7 @@ const RegisterForm = () => {
     data: registerData,
     error: registerError,
     isSuccess: registerIsSuccess,
-    isLoading: registerIsLoading,
+    isPending: registerIsPending,
     isError: registerIsError,
   } = useMutation<AuthResponse, ApiErrorResponse, RegisterAuthParams>({
     mutationFn: async (params) => await registerAuth(params),
@@ -99,6 +104,8 @@ const RegisterForm = () => {
   useEffect(() => {
     if (registerIsSuccess || registerIsError) setCardDisableStatus(false);
   }, [registerIsSuccess, registerIsError, setCardDisableStatus]);
+
+  const buttonIsLoading = registerIsPending || recaptchaIsLoading;
 
   return (
     <>
@@ -164,15 +171,9 @@ const RegisterForm = () => {
               </FormItem>
             )}
           />
-          <ForumButtonOutline
-            type="submit"
-            className="w-full"
-            disabled={registerIsLoading || recaptchaIsLoading}
-          >
-            {(registerIsLoading || recaptchaIsLoading) && (
-              <span className="loading loading-spinner loading-xs mr-2" />
-            )}
-            {!registerIsLoading && !recaptchaIsLoading ? "Register" : "Loading..."}
+          <ForumButtonOutline type="submit" className="lg:w-1/3">
+            {buttonIsLoading && <span className="loading loading-spinner loading-xs mr-2" />}
+            {!buttonIsLoading ? "Register" : "Loading..."}
           </ForumButtonOutline>
         </form>
       </Form>

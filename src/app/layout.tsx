@@ -13,17 +13,20 @@ const inter = Inter({
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "TheDemonTuan - The community shares Datapacks for Minecraft | TheDemonTuan",
+    title:
+      "TheDemonTuan - The community shares Datapacks for Minecraft | TheDemonTuan",
     description:
       "The community shares best Datapacks for Minecraft ever, You can find and download the best Datapacks for Minecraft here.",
   };
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <Script src="https://unpkg.com/htmx.org@1.9.6" />
-      <Script src="https://unpkg.com/hyperscript.org@0.9.11/dist/_hyperscript.min.js" />
       <body className={inter.className}>
         <ClientRootLayout>{children}</ClientRootLayout>
       </body>

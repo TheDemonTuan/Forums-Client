@@ -4,10 +4,12 @@ import {
   SessionResponse,
   SessionRevokeBody,
   SessionRevokeResponse,
+  SessionStatusChangeBody,
   SessionsKey,
   SessionsResponse,
   sessionAccount,
   sessionAccountRevoke,
+  sessionAccountStatusChange,
 } from "@/lib/api/accountApi";
 import { ApiErrorResponse } from "@/utils/http";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,14 +17,7 @@ import React, { useEffect, useRef } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AiFillWarning } from "react-icons/ai";
 import { toast } from "react-toastify";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import ConfirmDialog from "@/components/forums/ConfirmDialog";
@@ -64,6 +59,7 @@ const SessionID = ({ params }: { params: { id: string } }) => {
     queryKey: [...SessionsKey, id],
     queryFn: async ({ signal }) => await sessionAccount(id, signal),
     staleTime: 1000 * 30,
+    enabled: !!id,
   });
 
   const { mutate: sessionRevokeMutate, isPending: sessionRevokeIsPending } = useMutation<
@@ -75,16 +71,14 @@ const SessionID = ({ params }: { params: { id: string } }) => {
     onSuccess: (data) => {
       router.replace(`/${paths[1]}/${paths[2]}`);
       const sessionsQueryData = queryClient.getQueryData<SessionsResponse[]>(SessionsKey);
-      if (!sessionsQueryData) {
-        queryClient.invalidateQueries({
-          queryKey: SessionsKey,
-        });
-      } else {
+      sessionsQueryData &&
         queryClient.setQueryData<SessionsResponse[]>(
           SessionsKey,
           sessionsQueryData.filter((session) => session?.id !== id)
         );
-      }
+      queryClient.removeQueries({
+        queryKey: [...SessionsKey, id],
+      });
       toast.success(data?.message || "Revoke session successful!");
     },
     onError: (err) => {
@@ -96,7 +90,48 @@ const SessionID = ({ params }: { params: { id: string } }) => {
     sessionRevokeMutate({ id });
   };
 
-  const handleStatus = (status: boolean) => {};
+  const { mutate: sessionStatusChange, isPending: sessionStatusIsPending } = useMutation<
+    SessionResponse,
+    ApiErrorResponse,
+    SessionStatusChangeBody
+  >({
+    mutationFn: async (body) => await sessionAccountStatusChange(body),
+    onSuccess: (data) => {
+      const sessionQueryData = queryClient.getQueryData<SessionResponse>([...SessionsKey, id]);
+      !sessionQueryData
+        ? queryClient.invalidateQueries({
+            queryKey: [...SessionsKey, id],
+          })
+        : queryClient.setQueryData<SessionResponse>([...SessionsKey, id], {
+            ...data,
+          });
+
+      const sessionsQueryData = queryClient.getQueryData<SessionsResponse[]>(SessionsKey);
+      sessionsQueryData &&
+        queryClient.setQueryData<SessionsResponse[]>(
+          SessionsKey,
+          sessionsQueryData.map((session) => {
+            if (session?.id === id) {
+              return {
+                ...session,
+                ...data,
+              };
+            }
+            return session;
+          })
+        );
+      toast.success("Session status change successful!");
+    },
+    onError: (err) => {
+      toast.error(getErrorMessage(err, "Revoke session failed!"));
+    },
+  });
+
+  const handleStatus = (status: boolean) => {
+    sessionStatusChange({ id, status });
+  };
+
+  const cardContentIsPending = sessionRevokeIsPending || sessionStatusIsPending;
 
   useEffect(() => {
     return () => {
@@ -112,14 +147,11 @@ const SessionID = ({ params }: { params: { id: string } }) => {
       <Alert variant="destructive" className="my-5">
         <AiFillWarning size={21} />
         <AlertTitle>Error</AlertTitle>
-        <AlertDescription>
-          {getErrorMessage(sessionError, "An error occurred while fetching session")}
-        </AlertDescription>
+        <AlertDescription>{getErrorMessage(sessionError, "An error occurred while fetching session")}</AlertDescription>
       </Alert>
     );
 
-  if (sessionIsLoading || sessionRevokeIsPending)
-    return <span className="loading loading-spinner loading-md" />;
+  if (sessionIsLoading) return <span className="loading loading-spinner loading-md" />;
 
   if (!id || !sessionData)
     return (
@@ -136,10 +168,9 @@ const SessionID = ({ params }: { params: { id: string } }) => {
         title="Are you sure want to delete this session?"
         dialog={dialog}
         setDialog={setDialog}
-        onConfirm={handleConfirm}
-      >
-        This action cannot be undone. This will permanently delete this session and remove this
-        session from our servers..
+        onConfirm={handleConfirm}>
+        This action cannot be undone. This will permanently delete this session and remove this session from our
+        servers.
       </ConfirmDialog>
       <Card>
         <CardHeader className="lg_max:p-3">
@@ -152,11 +183,21 @@ const SessionID = ({ params }: { params: { id: string } }) => {
             </Alert>
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex justify-center lg_max:p-3">
+        <CardContent
+          className={`flex justify-center lg_max:p-3 ${cardContentIsPending && "pointer-events-none opacity-50"}`}>
           <Card className="lg_max:w-full">
             <CardHeader className="grid grid-cols-[1fr_110px] items-start gap-4 space-y-0 lg_max:p-4">
               <div className="space-y-1 md_max:w-28">
-                <CardTitle className="md_max:overflow-auto">#{sessionData?.id}</CardTitle>
+                <CardTitle className="md_max:overflow-auto">
+                  {cardContentIsPending ? (
+                    <>
+                      <span className="loading loading-spinner loading-xs mr-2" />
+                      <span>Loading...</span>
+                    </>
+                  ) : (
+                    `#${sessionData?.id}`
+                  )}
+                </CardTitle>
                 <CardDescription>
                   <div className="flex items-center gap-2 mt-2">
                     <span className="relative flex h-3 w-3">
@@ -172,11 +213,7 @@ const SessionID = ({ params }: { params: { id: string } }) => {
                       />
                     </span>
                     <span className="relative md:badge md:badge-ghost md:badge-sm">
-                      {sessionData?.is_current
-                        ? "Your current session"
-                        : sessionData?.is_active
-                        ? "Online"
-                        : "Offline"}
+                      {sessionData?.is_current ? "Your current session" : sessionData?.is_active ? "Online" : "Offline"}
                     </span>
                   </div>
                 </CardDescription>
@@ -193,24 +230,19 @@ const SessionID = ({ params }: { params: { id: string } }) => {
                       <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    align="end"
-                    alignOffset={-5}
-                    className="w-[200px]"
-                    forceMount
-                  >
+                  <DropdownMenuContent align="end" alignOffset={-5} className="w-[200px]" forceMount>
                     <DropdownMenuLabel>Status Lists</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuCheckboxItem
-                      checked={sessionData?.status}
-                      onClick={() => handleStatus(true)}
-                    >
+                      disabled={sessionData?.status}
+                      checked={sessionData?.status || sessionData?.is_current}
+                      onClick={() => handleStatus(true)}>
                       Active
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem
+                      disabled={!sessionData?.status || sessionData?.is_current}
                       checked={!sessionData?.status}
-                      onClick={() => handleStatus(false)}
-                    >
+                      onClick={() => handleStatus(false)}>
                       Inactive
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuSeparator />

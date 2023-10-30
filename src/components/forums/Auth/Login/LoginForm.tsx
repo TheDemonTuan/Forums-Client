@@ -136,7 +136,7 @@ const LoginForm = () => {
               </FormItem>
             )}
           />
-          <ForumButtonOutline type="submit" className="w-full" disabled={buttonIsLoading}>
+          <ForumButtonOutline type="submit" className="w-full lg:w-1/3">
             {buttonIsLoading && <span className="loading loading-spinner loading-xs mr-2" />}
             {!buttonIsLoading ? "Login" : "Loading..."}
           </ForumButtonOutline>

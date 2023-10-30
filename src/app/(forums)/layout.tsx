@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "@/components/forums/Header";
 import Footer from "@/components/forums/Footer";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function ForumsLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />

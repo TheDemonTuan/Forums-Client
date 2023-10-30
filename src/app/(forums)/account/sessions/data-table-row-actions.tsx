@@ -20,7 +20,7 @@ import { GrView } from "react-icons/gr";
 import { sessionsSchema } from "./schema";
 import { usePathname } from "next/navigation";
 import ConfirmDialog from "@/components/forums/ConfirmDialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   SessionRevokeBody,
@@ -33,6 +33,7 @@ import { ApiErrorResponse } from "@/utils/http";
 import { toast } from "react-toastify";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import Link from "next/link";
+import { useAccountSessionsStore } from "@/lib/store/accountStore";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -43,6 +44,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
   const queryClient = useQueryClient();
   const [dialog, setDialog] = useState<boolean>(false);
   const pathname = usePathname();
+  const { setTableHandle } = useAccountSessionsStore();
 
   const { mutate: sessionRevokeMutate } = useMutation<
     SessionRevokeResponse,
@@ -50,15 +52,18 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
     SessionRevokeBody
   >({
     mutationFn: async (id) => await sessionAccountRevoke(id),
+    onMutate: () => {
+      setTableHandle(true);
+    },
     onSuccess: () => {
-      const sessionsData = queryClient.getQueryData<SessionsResponse[]>([SessionsKey]);
+      const sessionsData = queryClient.getQueryData<SessionsResponse[]>(SessionsKey);
       if (!sessionsData) {
         queryClient.invalidateQueries({
-          queryKey: [SessionsKey],
+          queryKey: SessionsKey,
         });
       } else {
         queryClient.setQueryData<SessionsResponse[]>(
-          [SessionsKey],
+          SessionsKey,
           sessionsData.filter((session) => session.id !== sessions?.id)
         );
       }
@@ -67,11 +72,20 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
     onError: (err) => {
       toast.error(getErrorMessage(err, "Revoke sesion failed!"));
     },
+    onSettled: () => {
+      setTableHandle(false);
+    },
   });
 
   const handleRevoke = () => {
     sessionRevokeMutate({ id: sessions?.id });
   };
+
+  useEffect(() => {
+    return () => {
+      setDialog(false);
+    };
+  }, []);
 
   return (
     <>
